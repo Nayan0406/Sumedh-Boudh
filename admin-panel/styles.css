@@ -120,6 +120,8 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .login-form,
@@ -131,6 +133,7 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 500px;
+    box-sizing: border-box;
 }
 
 .login-form h2,
@@ -162,6 +165,8 @@ body {
     border-radius: 4px;
     font-size: 16px;
     transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .form-group input:focus,
@@ -259,37 +264,208 @@ body {
     pointer-events: none;
 }
 
+/* Responsive Grid for Blogs */
+.blogs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.blog-card {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.blog-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    background: #1f2937;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 18px;
+    z-index: 1001;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-toggle:hover {
+    background: #374151;
+}
+
+/* Mobile Overlay */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .blogs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .login-container,
+    .register-container,
+    .add-blog-container,
+    .contact-container {
+        padding: 0 20px;
+    }
+}
+
 @media (max-width: 768px) {
-    .app {
-        flex-direction: column;
-    }
-    
     .sidebar {
+        position: fixed !important;
+        top: 0;
+        left: -256px;
+        height: 100vh;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sidebar.open {
+        left: 0;
+    }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    .main-content {
+        margin-left: 0 !important;
         width: 100%;
-        height: auto;
     }
     
-    .sidebar-nav {
-        display: flex;
-        overflow-x: auto;
-        padding: 8px;
+    .add-blog-container,
+    .contact-container {
+        margin-left: 0 !important;
+        padding: 80px 16px 32px 16px;
+        min-height: calc(100vh - 80px);
     }
     
-    .sidebar-nav li {
-        margin-right: 8px;
-        margin-bottom: 0;
-        min-width: 120px;
+    .blogs-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 24px;
     }
     
     .page {
-        padding: 20px;
+        padding: 20px 16px;
     }
     
     .login-form,
     .register-form,
     .add-blog-form {
-        padding: 24px;
-        margin: 20px;
+        padding: 24px 20px;
+        margin: 0;
+        max-width: 100%;
+    }
+    
+    .sidebar-nav {
+        padding: 12px;
+    }
+    
+    .sidebar-header {
+        padding: 16px;
+    }
+    
+    .sidebar-footer {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 280px;
+        left: -280px;
+    }
+    
+    .blogs-grid {
+        gap: 12px;
+    }
+    
+    .blog-card {
+        padding: 16px;
+    }
+    
+    .login-form,
+    .register-form,
+    .add-blog-form {
+        padding: 20px 16px;
+    }
+    
+    .add-blog-container,
+    .contact-container {
+        padding: 60px 12px 20px 12px;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .sidebar-header h2 {
+        font-size: 20px;
+    }
+    
+    .nav-link {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .logout-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Landscape tablets */
+@media (max-width: 1024px) and (orientation: landscape) {
+    .blogs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+    .add-blog-container,
+    .contact-container {
+        padding: 60px 8px 16px 8px;
+    }
+    
+    .login-form,
+    .register-form,
+    .add-blog-form {
+        padding: 16px 12px;
     }
 }
