@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
     <div style="display:flex; min-height:100vh;">
@@ -56,16 +57,52 @@
             </form>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     <script>
-    function handleAddBlog(event) {
+    async function handleAddBlog(event) {
         event.preventDefault();
         const title = document.getElementById('blog-title').value;
         const content = document.getElementById('blog-content').value;
         const author = document.getElementById('blog-author').value;
-        // You can send this data to your backend here
-        alert('Blog added!\nTitle: ' + title + '\nContent: ' + content + '\nAuthor: ' + author);
-        // Optionally clear the form
-        event.target.reset();
+        try {
+            const response = await fetch('http://localhost:5000/blog', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, content, author })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                Toastify({
+                    text: data.message || 'Blog added successfully!',
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#10b981",
+                    close: true
+                }).showToast();
+                event.target.reset();
+            } else {
+                Toastify({
+                    text: data.error || 'Failed to add blog.',
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#ef4444",
+                    close: true
+                }).showToast();
+            }
+        } catch (err) {
+            Toastify({
+                text: 'Network error. Please try again.',
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#ef4444",
+                close: true
+            }).showToast();
+        }
     }
     </script>
 </body>

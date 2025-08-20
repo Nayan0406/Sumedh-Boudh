@@ -10,6 +10,7 @@
 
 </head>
 <body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 <!-- Social Media Sidebar -->
 <div class="social-sidebar">
     <a href="#" class="social-icon behance" title="Behance">
@@ -87,21 +88,21 @@
         <div class="contact-form">
             <h1>CONTACT FORM</h1>
             
-            <form action="/submit" method="post">
+            <form action="/submit" method="post" onsubmit="handleContactSubmit(event)">
                 <div class="form-group">
-                    <input type="text" id="name" name="name" placeholder="Your Name" class="underline-input">
+                    <input type="text" id="name" name="name" placeholder="Your Name" class="underline-input" required>
                 </div>
                 
                 <div class="form-group">
-                    <input type="tel" id="number" name="number" placeholder="Your Number" class="underline-input">
+                    <input type="tel" id="number" name="number" placeholder="Your Number" class="underline-input" required>
                 </div>
                 
                 <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="Your Email" class="underline-input">
+                    <input type="email" id="email" name="email" placeholder="Your Email" class="underline-input" required>
                 </div>
                 
                 <div class="form-group">
-                    <input type="text" id="message" name="message" placeholder="Message" class="underline-input">
+                    <input type="text" id="message" name="message" placeholder="Message" class="underline-input" required>
                 </div>
                 
                 <button type="submit" class="send-button">Send Message</button>
@@ -155,5 +156,55 @@
   </div>
 </footer>
 <script src="script.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+<script>
+async function handleContactSubmit(event) {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const number = document.getElementById('number').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    
+    try {
+        const response = await fetch('http://localhost:5000/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, number, email, message })
+        });
+        const data = await response.json();
+        if (response.ok) {
+            Toastify({
+                text: data.message || 'Contact form submitted successfully!',
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#10b981",
+                close: true
+            }).showToast();
+            event.target.reset();
+        } else {
+            Toastify({
+                text: data.error || 'Failed to submit contact form.',
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#ef4444",
+                close: true
+            }).showToast();
+        }
+    } catch (err) {
+        Toastify({
+            text: 'Network error. Please try again.',
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "#ef4444",
+            close: true
+        }).showToast();
+    }
+}
+</script>
 </body>
 </html>

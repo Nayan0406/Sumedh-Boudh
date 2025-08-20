@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Contact Messages - Admin Panel</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
     <div style="display:flex; min-height:100vh;">
-    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
+        <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
                 <a href="/admin-panel/" style="color: white; text-decoration: none;">
                     <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
@@ -16,18 +17,18 @@
             </div>
             <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
                 <li style="margin-bottom: 8px;">
-                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminBlog.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
                         <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminProduct.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
                         <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
-                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Form
+                    <a href="adminContact.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; background-color: #374151;">
+                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Messages
                     </a>
                 </li>
             </ul>
@@ -37,6 +38,71 @@
                 </button>
             </div>
         </nav>
+        
+        <div class="main-content" style="flex: 1; padding: 24px;">
+            <div style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h2 style="margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Contact Messages</h2>
+                <div id="contacts-container" style="margin-top: 20px;">
+                    <div id="loading" style="text-align: center; padding: 40px; color: #6b7280;">
+                        Loading contacts...
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script>
+        async function loadContacts() {
+            try {
+                const response = await fetch('http://localhost:5000/contact');
+                const contacts = await response.json();
+                
+                const container = document.getElementById('contacts-container');
+                const loadingDiv = document.getElementById('loading');
+                
+                if (contacts.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 40px; color: #6b7280;">No contact messages found.</div>';
+                    return;
+                }
+                
+                loadingDiv.style.display = 'none';
+                
+                const contactsHTML = contacts.map(contact => `
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 16px; background: #f9fafb;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                            <h3 style="margin: 0; font-size: 18px; color: #1f2937;">${contact.name}</h3>
+                            <span style="font-size: 14px; color: #6b7280;">${new Date(contact.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <strong style="color: #374151;">Phone:</strong> <span style="color: #6b7280;">${contact.number}</span>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <strong style="color: #374151;">Email:</strong> <span style="color: #6b7280;">${contact.email}</span>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <strong style="color: #374151;">Message:</strong> 
+                            <p style="margin: 4px 0 0 0; color: #6b7280; line-height: 1.5;">${contact.message}</p>
+                        </div>
+                    </div>
+                `).join('');
+                
+                container.innerHTML = contactsHTML;
+                
+            } catch (err) {
+                console.error('Error loading contacts:', err);
+                document.getElementById('contacts-container').innerHTML = 
+                    '<div style="text-align: center; padding: 40px; color: #ef4444;">Error loading contacts. Please try again.</div>';
+            }
+        }
+        
+        function logout() {
+            // Add logout functionality here
+            window.location.href = '/admin-panel/index.html';
+        }
+        
+        // Load contacts when page loads
+        window.addEventListener('load', loadContacts);
+    </script>
 </body>
 </html>

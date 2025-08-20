@@ -8,6 +8,8 @@ import bcrypt from 'bcryptjs';
 import registerRoute from './routes/registerRoute.js';
 import cors from 'cors';
 import loginRoute from './routes/loginRoute.js';
+import productRoute from './routes/productRoute.js';
+import contactRoute from './routes/contactRoute.js';
 
 dotenv.config();
 
@@ -28,6 +30,11 @@ app.use('/blog', blogRoute);
 app.use('/register', registerRoute);
 
 app.use('/login', loginRoute);
+
+// Serve uploaded images statically
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+app.use('/product', productRoute);
+app.use('/contact', contactRoute);
 
 app.get('/', (req, res) =>{
   res.sendFile(path.join(__dirname, '..', 'contact.html'));

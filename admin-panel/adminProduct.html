@@ -37,24 +37,88 @@
                 </button>
             </div>
         </nav>
-        <div class="add-blog-container" style="flex:1; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-            <form class="add-blog-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;" onsubmit="handleAddBlog(event)">
+        <div class="add-product-container" style="flex:1; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+            <form class="add-product-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;" onsubmit="handleAddProduct(event)">
                 <h2 style="text-align: center; margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Add Product</h2>
                 <div class="form-group" style="margin-bottom: 16px;">
-                    <label for="blog-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
-                    <input type="text" id="blog-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
+                    <label for="product-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
+                    <input type="text" id="product-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
                 </div>
                 <div class="form-group" style="margin-bottom: 16px;">
-                    <label for="blog-content" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Content</label>
-                    <textarea id="blog-content" name="content" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px; resize: vertical;"></textarea>
+                    <label for="product-content" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Content</label>
+                    <textarea id="product-content" name="content" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px; resize: vertical;"></textarea>
                 </div>
                 <div class="form-group" style="margin-bottom: 24px;">
-                    <label for="blog-author" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Image</label>
-                    <input type="text" id="blog-author" name="author" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
+                    <label for="product-image" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Image</label>
+                    <input type="file" id="product-image" name="image" accept="image/*" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; background-color: #2563eb; color: white; cursor: pointer;">Add Product</button>
             </form>
         </div>
+</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
+</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script>
+    async function handleAddProduct(event) {
+        event.preventDefault();
+        const title = document.getElementById('product-title').value;
+        const content = document.getElementById('product-content').value;
+        const imageInput = document.getElementById('product-image');
+        const imageFile = imageInput.files[0];
+        if (!imageFile) {
+            Toastify({
+                text: 'Please select an image.',
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#ef4444",
+                close: true
+            }).showToast();
+            return;
+        }
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('image', imageFile);
+        try {
+            const response = await fetch('http://localhost:5000/product', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            if (response.ok) {
+                Toastify({
+                    text: data.message || 'Product added successfully!',
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#10b981",
+                    close: true
+                }).showToast();
+                event.target.reset();
+            } else {
+                Toastify({
+                    text: data.error || 'Failed to add product.',
+                    duration: 3000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "#ef4444",
+                    close: true
+                }).showToast();
+            }
+        } catch (err) {
+            Toastify({
+                text: 'Network error. Please try again.',
+                duration: 3000,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#ef4444",
+                close: true
+            }).showToast();
+        }
+    }
+    </script>
     </div>
 </body>
 </html>
