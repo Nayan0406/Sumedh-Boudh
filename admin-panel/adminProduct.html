@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
     <div style="display:flex; min-height:100vh;">
@@ -38,7 +39,7 @@
             </div>
         </nav>
         <div class="add-product-container" style="flex:1; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-            <form class="add-product-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;" onsubmit="handleAddProduct(event)">
+            <form class="add-product-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;">
                 <h2 style="text-align: center; margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Add Product</h2>
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label for="product-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
@@ -55,9 +56,7 @@
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; background-color: #2563eb; color: white; cursor: pointer;">Add Product</button>
             </form>
         </div>
-</head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
-</body>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
     <script>
     function logout() {
@@ -65,11 +64,14 @@
     }
     async function handleAddProduct(event) {
         event.preventDefault();
+        console.log('Form submitted'); // Debug log
         const title = document.getElementById('product-title').value;
         const content = document.getElementById('product-content').value;
         const imageInput = document.getElementById('product-image');
         const imageFile = imageInput.files[0];
+        console.log('Form data:', { title, content, imageFile }); // Debug log
         if (!imageFile) {
+            console.log('No image selected'); // Debug log
             Toastify({
                 text: 'Please select an image.',
                 duration: 3000,
@@ -85,12 +87,15 @@
         formData.append('content', content);
         formData.append('image', imageFile);
         try {
+            console.log('Sending request to server...'); // Debug log
             const response = await fetch('http://localhost:5000/product', {
                 method: 'POST',
                 body: formData
             });
             const data = await response.json();
+            console.log('Server response:', data); // Debug log
             if (response.ok) {
+                console.log('Success! Showing popup...'); // Debug log
                 Toastify({
                     text: data.message || 'Product added successfully!',
                     duration: 3000,
@@ -101,6 +106,7 @@
                 }).showToast();
                 event.target.reset();
             } else {
+                console.log('Error response:', data); // Debug log
                 Toastify({
                     text: data.error || 'Failed to add product.',
                     duration: 3000,
@@ -111,6 +117,7 @@
                 }).showToast();
             }
         } catch (err) {
+            console.error('Network error:', err); // Debug log
             Toastify({
                 text: 'Network error. Please try again.',
                 duration: 3000,
@@ -121,7 +128,10 @@
             }).showToast();
         }
     }
+        // Attach event handler to form after DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.add-product-form').addEventListener('submit', handleAddProduct);
+        });
     </script>
-    </div>
 </body>
 </html>
