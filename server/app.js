@@ -1,13 +1,33 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
+import express from 'express';
+import mongoose from 'mongoose';
+import path from 'path';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import blogRoute from './routes/blogRoute.js';
+import bcrypt from 'bcryptjs';
+import registerRoute from './routes/registerRoute.js';
+import cors from 'cors';
+import loginRoute from './routes/loginRoute.js';
+
+dotenv.config();
 
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // Serve static files from the parent directory (where contact.html is located)
 app.use(express.static(path.join(__dirname, '..')));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const port = 5000;
+
+app.use(cors());
+
+app.use('/blog', blogRoute);
+
+app.use('/register', registerRoute);
+
+app.use('/login', loginRoute);
 
 app.get('/', (req, res) =>{
   res.sendFile(path.join(__dirname, '..', 'contact.html'));
@@ -17,34 +37,8 @@ app.get('/contact.html', (req, res) =>{
   res.sendFile(path.join(__dirname, '..', 'contact.html'));
 })
 
-mongoose.connect('mongodb+srv://nayan:nayan04@cluster0.lre5h1q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(()=>{
+mongoose.connect(process.env.MONGO_URI).then(()=>{
   console.log('MongoDB is connected');
-})
-
-const Schema= mongoose.Schema;
-
-const dataschema= new Schema({
-  name: String,
-  number: String,
-  email: String,
-  message: String,
-})
-
-const Data = mongoose.model('data', dataschema);
-
-app.post('/submit', async (req, res)=>{
-  const {name, number, email, message}= req.body;
-  const newData= new Data({
-    name,
-    number,
-    email,message,
-  });
-  try {
-    await newData.save();
-    res.status(200).json({ message: 'Data saved successfully' });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to save data' });
-  }
 })
 
 app.listen(port,()=>{
