@@ -33,17 +33,13 @@ function updateNavigation() {
 // Authentication functions
 async function handleLogin(event) {
     event.preventDefault();
-    
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const loginBtn = document.getElementById('login-btn');
     const messageDiv = document.getElementById('login-message');
-    
-    // Show loading state
     loginBtn.textContent = 'Logging in...';
     loginBtn.disabled = true;
     messageDiv.style.display = 'none';
-    
     try {
         const response = await fetch('http://localhost:5000/login', {
             method: 'POST',
@@ -52,42 +48,38 @@ async function handleLogin(event) {
             },
             body: JSON.stringify({ email, password })
         });
-        
         const data = await response.json();
-        
         if (response.ok) {
-            // Success
             showMessage('login-message', data.message || 'Login successful!', 'success');
             showToast('Login successful!', 'success');
-            
-            // Store login state
             localStorage.setItem('isLoggedIn', 'true');
             isLoggedIn = true;
-            
-            // Clear form
             document.getElementById('email').value = '';
             document.getElementById('password').value = '';
-            
-            // Redirect to add-blog page after short delay
-            setTimeout(() => {
-                showPage('add-blog');
-            }, 1000);
-            
+            // Immediately show sidebar/dashboard after login
+            showSidebarDashboard();
         } else {
-            // Error
             showMessage('login-message', data.error || 'Login failed', 'error');
             showToast(data.error || 'Login failed', 'error');
         }
-        
     } catch (error) {
         console.error('Login error:', error);
         showMessage('login-message', 'Network error. Please try again.', 'error');
         showToast('Network error. Please try again.', 'error');
     } finally {
-        // Reset button state
         loginBtn.textContent = 'Login';
         loginBtn.disabled = false;
     }
+}
+
+function showSidebarDashboard() {
+    // Hide login/register pages
+    const loginPage = document.getElementById('login-page');
+    const registerPage = document.getElementById('register-page');
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) sidebar.style.display = 'flex';
+    if (loginPage) loginPage.style.display = 'none';
+    if (registerPage) registerPage.style.display = 'none';
 }
 
 async function handleRegister(event) {
@@ -224,12 +216,23 @@ function logout() {
     // Clear authentication data
     localStorage.removeItem('isLoggedIn');
     isLoggedIn = false;
-    
     // Show logout message
     showToast('Logged out successfully', 'success');
-    
-    // Redirect to login page
-    showPage('login');
+    // Hide sidebar, show login page
+    const sidebar = document.getElementById('sidebar');
+    const loginPage = document.getElementById('login-page');
+    const registerPage = document.getElementById('register-page');
+    if (sidebar) sidebar.style.display = 'none';
+    if (loginPage) {
+        loginPage.classList.add('active');
+        loginPage.style.display = '';
+    }
+    if (registerPage) {
+        registerPage.classList.remove('active');
+        registerPage.style.display = '';
+    }
+    // Optionally update URL to /admin-panel/
+    window.history.pushState({}, '', '/admin-panel/');
 }
 
 // Initialize the application

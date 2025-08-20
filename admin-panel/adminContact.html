@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="margin:0; padding:0; background:#f3f4f6;">
+    <div style="display:flex; min-height:100vh;">
+    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
+            <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
+                <a href="/admin-panel/" style="color: white; text-decoration: none;">
+                    <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
+                </a>
+            </div>
+            <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
+                <li style="margin-bottom: 8px;">
+                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
+                    </a>
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
+                    </a>
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Form
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer" style="padding: 16px; border-top: 1px solid #374151;">
+                <button class="logout-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 12px; background-color: #dc2626; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; font-size: 16px;" onclick="logout()">
+                    <span style="margin-right: 12px; font-size: 18px;">🚪</span> Logout
+                </button>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

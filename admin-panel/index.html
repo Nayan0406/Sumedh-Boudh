@@ -9,139 +9,163 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body>
-    <div class="app">
-        <!-- Sidebar -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <h2>Admin Panel</h2>
+    <div id="login-app" class="app">
+        <!-- Sidebar (hidden by default) -->
+        <nav id="sidebar" class="sidebar" style="display:none; width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
+            <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
+                <h2 style="font-size: 24px; font-weight: bold;">Admin Panel</h2>
             </div>
-            
-            <ul class="sidebar-nav">
-                <li>
-                    <a href="#" onclick="showPage('add-blog')" class="nav-link">
-                        <i class="fas fa-edit"></i>
-                        <span>Add Blog</span>
+            <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
+                <li style="margin-bottom: 8px;">
+                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
                     </a>
                 </li>
-                <li>
-                    <a href="#" onclick="showPage('contact-form')" class="nav-link">
-                        <i class="fas fa-envelope"></i>
-                        <span>Contact Forms</span>
+                <li style="margin-bottom: 8px;">
+                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
+                    </a>
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Form
                     </a>
                 </li>
             </ul>
-            
-            <div class="sidebar-footer">
-                <button class="logout-btn" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
+            <div class="sidebar-footer" style="padding: 16px; border-top: 1px solid #374151;">
+                <button class="logout-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 12px; background-color: #dc2626; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; font-size: 16px;" onclick="logout()">
+                    <span style="margin-right: 12px; font-size: 18px;">🚪</span> Logout
                 </button>
             </div>
         </nav>
-
-        <!-- Main Content -->
         <main class="main-content">
             <!-- Login Page -->
-            <div id="login-page" class="page active">
+            <div id="login-page" class="page">
                 <div class="login-container">
                     <form class="login-form" onsubmit="handleLogin(event)">
                         <h2>Login</h2>
                         <div id="login-message" class="message"></div>
-                        
                         <div class="form-group">
                             <label for="email">Email</label>
                             <input type="email" id="email" name="email" required>
                         </div>
-                        
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password" required>
                         </div>
-                        
                         <button type="submit" class="btn btn-primary" id="login-btn">
                             Login
                         </button>
-                        
-                        <p class="register-link">
-                            Don't have an account? <a href="#" onclick="showPage('register')">Register</a>
-                        </p>
                     </form>
                 </div>
             </div>
-
             <!-- Register Page -->
             <div id="register-page" class="page">
                 <div class="register-container">
                     <form class="register-form" onsubmit="handleRegister(event)">
                         <h2>Register</h2>
                         <div id="register-message" class="message"></div>
-                        
+                        <div class="form-group">
+                            <label for="reg-username">Username</label>
+                            <input type="text" id="reg-username" name="username" required>
+                        </div>
                         <div class="form-group">
                             <label for="reg-email">Email</label>
                             <input type="email" id="reg-email" name="email" required>
                         </div>
-                        
                         <div class="form-group">
                             <label for="reg-password">Password</label>
                             <input type="password" id="reg-password" name="password" required>
                         </div>
-                        
                         <button type="submit" class="btn btn-primary" id="register-btn">
                             Register
                         </button>
-                        
                         <p class="login-link">
-                            Already have an account? <a href="#" onclick="showPage('login')">Login</a>
+                            Already have an account? <a href="/admin-panel/" id="login-link">Login</a>
                         </p>
                     </form>
                 </div>
             </div>
-
-            <!-- Add Blog Page -->
-            <div id="add-blog-page" class="page">
-                <div class="add-blog-container">
-                    <form class="add-blog-form" onsubmit="handleAddBlog(event)">
-                        <h2>Add Blog</h2>
-                        <div id="blog-message" class="message"></div>
-                        
-                        <div class="form-group">
-                            <label for="blog-title">Title</label>
-                            <input type="text" id="blog-title" name="title" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="blog-content">Content</label>
-                            <textarea id="blog-content" name="content" rows="5" required></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="blog-author">Author</label>
-                            <input type="text" id="blog-author" name="author" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="blog-date">Date</label>
-                            <input type="date" id="blog-date" name="date" required>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary" id="add-blog-btn">
-                            Add Blog
-                        </button>
-                    </form>
-                </div>
+            <!-- Dashboard Pages -->
+            <div id="dashboard-add-blog" class="dashboard-page" style="display:none; padding:40px;">
+                <h2>Add Blog</h2>
+                <p>This is the Add Blog page.</p>
             </div>
-
-            <!-- Contact Form Page -->
-            <div id="contact-form-page" class="page">
-                <div class="contact-container">
-                    <h2>Contact Forms</h2>
-                    <p>Contact form management will be implemented here.</p>
-                </div>
+            <div id="dashboard-add-product" class="dashboard-page" style="display:none; padding:40px;">
+                <h2>Add Product</h2>
+                <p>This is the Add Product page.</p>
+            </div>
+            <div id="dashboard-contact-form" class="dashboard-page" style="display:none; padding:40px;">
+                <h2>Contact Form</h2>
+                <p>This is the Contact Form page.</p>
             </div>
         </main>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
-    <script src="script.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+        <script>
+        // Show/hide sidebar and pages based on login state and URL
+        function showAuthPage() {
+            const loginPage = document.getElementById('login-page');
+            const registerPage = document.getElementById('register-page');
+            const sidebar = document.getElementById('sidebar');
+            // Check login state
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            if (isLoggedIn) {
+                // Show sidebar, hide auth pages
+                sidebar.style.display = 'flex';
+                loginPage.style.display = 'none';
+                registerPage.style.display = 'none';
+            } else {
+                // Hide sidebar, show correct auth page
+                sidebar.style.display = 'none';
+                if (window.location.pathname.endsWith('/register')) {
+                    loginPage.classList.remove('active');
+                    registerPage.classList.add('active');
+                } else {
+                    registerPage.classList.remove('active');
+                    loginPage.classList.add('active');
+                }
+                loginPage.style.display = '';
+                registerPage.style.display = '';
+            }
+        }
+
+        // Show dashboard page and keep sidebar visible
+        function showDashboardPage(page) {
+            // Hide all dashboard pages
+            document.querySelectorAll('.dashboard-page').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            // Show the requested page
+            var pageDiv = document.getElementById('dashboard-' + page);
+            if (pageDiv) pageDiv.style.display = 'block';
+            // Make sure sidebar is visible
+            var sidebar = document.getElementById('sidebar');
+            if (sidebar) sidebar.style.display = 'flex';
+            // Hide login/register
+            var loginPage = document.getElementById('login-page');
+            var registerPage = document.getElementById('register-page');
+            if (loginPage) loginPage.style.display = 'none';
+            if (registerPage) registerPage.style.display = 'none';
+        }
+        
+        // Handle navigation without reload
+        document.addEventListener('DOMContentLoaded', function() {
+            showAuthPage();
+            document.getElementById('register-link').onclick = function(e) {
+                e.preventDefault();
+                window.history.pushState({}, '', '/admin-panel/register');
+                showAuthPage();
+            };
+            document.getElementById('login-link').onclick = function(e) {
+                e.preventDefault();
+                window.history.pushState({}, '', '/admin-panel/');
+                showAuthPage();
+            };
+            window.addEventListener('popstate', showAuthPage);
+        });
+        </script>
+        <script src="script.js"></script>
 </body>
 </html>

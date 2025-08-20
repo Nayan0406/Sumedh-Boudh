@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body style="margin:0; padding:0; background:#f3f4f6;">
+    <div style="display:flex; min-height:100vh;">
+    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
+            <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
+                <a href="/admin-panel/" style="color: white; text-decoration: none;">
+                    <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
+                </a>
+            </div>
+            <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
+                <li style="margin-bottom: 8px;">
+                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
+                    </a>
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
+                    </a>
+                </li>
+                <li style="margin-bottom: 8px;">
+                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Form
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer" style="padding: 16px; border-top: 1px solid #374151;">
+                <button class="logout-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 12px; background-color: #dc2626; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; font-size: 16px;" onclick="logout()">
+                    <span style="margin-right: 12px; font-size: 18px;">🚪</span> Logout
+                </button>
+            </div>
+        </nav>
+        <div class="add-blog-container" style="flex:1; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+            <form class="add-blog-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;" onsubmit="handleAddBlog(event)">
+                <h2 style="text-align: center; margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Add Product</h2>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="blog-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
+                    <input type="text" id="blog-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
+                </div>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label for="blog-content" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Content</label>
+                    <textarea id="blog-content" name="content" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px; resize: vertical;"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label for="blog-author" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Image</label>
+                    <input type="text" id="blog-author" name="author" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; background-color: #2563eb; color: white; cursor: pointer;">Add Product</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
