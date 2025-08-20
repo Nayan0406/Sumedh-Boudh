@@ -87,7 +87,7 @@
                 </div>
             </div>
             <!-- Dashboard Pages -->
-            <div id="dashboard-add-blog" class="dashboard-page" style="display:none; padding:40px;">
+            <!-- <div id="dashboard-add-blog" class="dashboard-page" style="display:none; padding:40px;">
                 <h2>Add Blog</h2>
                 <p>This is the Add Blog page.</p>
             </div>
@@ -98,7 +98,7 @@
             <div id="dashboard-contact-form" class="dashboard-page" style="display:none; padding:40px;">
                 <h2>Contact Form</h2>
                 <p>This is the Contact Form page.</p>
-            </div>
+            </div> -->
         </main>
     </div>
 
@@ -160,7 +160,7 @@
             };
             document.getElementById('login-link').onclick = function(e) {
                 e.preventDefault();
-                window.history.pushState({}, '', '/admin-panel/');
+                window.history.pushState({}, '', '/admin-panel/dashboard.html');
                 showAuthPage();
             };
             window.addEventListener('popstate', showAuthPage);
