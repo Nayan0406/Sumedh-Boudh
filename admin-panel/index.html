@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+            </div>
+            
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="#" onclick="showPage('add-blog')" class="nav-link">
+                        <i class="fas fa-edit"></i>
+                        <span>Add Blog</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" onclick="showPage('contact-form')" class="nav-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>Contact Forms</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Login Page -->
+            <div id="login-page" class="page active">
+                <div class="login-container">
+                    <form class="login-form" onsubmit="handleLogin(event)">
+                        <h2>Login</h2>
+                        <div id="login-message" class="message"></div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="login-btn">
+                            Login
+                        </button>
+                        
+                        <p class="register-link">
+                            Don't have an account? <a href="#" onclick="showPage('register')">Register</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Register Page -->
+            <div id="register-page" class="page">
+                <div class="register-container">
+                    <form class="register-form" onsubmit="handleRegister(event)">
+                        <h2>Register</h2>
+                        <div id="register-message" class="message"></div>
+                        
+                        <div class="form-group">
+                            <label for="reg-email">Email</label>
+                            <input type="email" id="reg-email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <input type="password" id="reg-password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="register-btn">
+                            Register
+                        </button>
+                        
+                        <p class="login-link">
+                            Already have an account? <a href="#" onclick="showPage('login')">Login</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Add Blog Page -->
+            <div id="add-blog-page" class="page">
+                <div class="add-blog-container">
+                    <form class="add-blog-form" onsubmit="handleAddBlog(event)">
+                        <h2>Add Blog</h2>
+                        <div id="blog-message" class="message"></div>
+                        
+                        <div class="form-group">
+                            <label for="blog-title">Title</label>
+                            <input type="text" id="blog-title" name="title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="blog-content">Content</label>
+                            <textarea id="blog-content" name="content" rows="5" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="blog-author">Author</label>
+                            <input type="text" id="blog-author" name="author" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="blog-date">Date</label>
+                            <input type="date" id="blog-date" name="date" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" id="add-blog-btn">
+                            Add Blog
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Contact Form Page -->
+            <div id="contact-form-page" class="page">
+                <div class="contact-container">
+                    <h2>Contact Forms</h2>
+                    <p>Contact form management will be implemented here.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
