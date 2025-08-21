@@ -9,7 +9,7 @@
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
     <div style="display:flex; min-height:100vh;">
-    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
+    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
                 <a href="/admin-panel/dashboard.html" style="color: white; text-decoration: none;">
                     <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
@@ -38,8 +38,8 @@
                 </button>
             </div>
         </nav>
-        <div class="add-product-container" style="flex:1; display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-            <form class="add-product-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;">
+        <div class="add-product-container" style="flex:1; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin-left: 256px;">
+            <form class="add-product-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px; margin-bottom: 40px;">
                 <h2 style="text-align: center; margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Add Product</h2>
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label for="product-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
@@ -55,6 +55,12 @@
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; background-color: #2563eb; color: white; cursor: pointer;">Add Product</button>
             </form>
+
+            <!-- Products Grid Section (now directly below the form) -->
+            <div id="products-section" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;">
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; color: #1f2937;">All Products</h2>
+                <div id="products-grid" style="display: flex; flex-wrap: wrap; gap: 24px;"></div>
+            </div>
         </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
@@ -105,6 +111,7 @@
                     close: true
                 }).showToast();
                 event.target.reset();
+                loadProducts(); // Refresh product list
             } else {
                 console.log('Error response:', data); // Debug log
                 Toastify({
@@ -128,10 +135,130 @@
             }).showToast();
         }
     }
-        // Attach event handler to form after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelector('.add-product-form').addEventListener('submit', handleAddProduct);
-        });
+
+    // Edit Product Modal
+    let editingProductId = null;
+    function editProduct(id, title, content) {
+        editingProductId = id;
+        // Create modal if not exists
+        let modal = document.getElementById('edit-product-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'edit-product-modal';
+            modal.style = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;z-index:9999;';
+            modal.innerHTML = `
+                <div style="background:#fff;padding:32px 24px;border-radius:10px;max-width:400px;width:100%;position:relative;">
+                    <button id="close-edit-modal" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:22px;cursor:pointer;">&times;</button>
+                    <h2 style="margin-bottom:18px;font-size:22px;">Edit Product</h2>
+                    <form id="edit-product-form">
+                        <div style="margin-bottom:12px;">
+                            <label>Title</label>
+                            <input type="text" id="edit-product-title" style="width:100%;padding:8px;" required>
+                        </div>
+                        <div style="margin-bottom:12px;">
+                            <label>Content</label>
+                            <textarea id="edit-product-content" rows="4" style="width:100%;padding:8px;" required></textarea>
+                        </div>
+                        <div style="margin-bottom:18px;">
+                            <label>Image (leave blank to keep current)</label>
+                            <input type="file" id="edit-product-image" accept="image/*">
+                        </div>
+                        <button type="submit" style="width:100%;padding:10px;background:#2563eb;color:#fff;border:none;border-radius:5px;font-size:1rem;font-weight:600;">Save Changes</button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.getElementById('close-edit-modal').onclick = () => modal.remove();
+            document.getElementById('edit-product-form').onsubmit = handleEditProduct;
+        } else {
+            modal.style.display = 'flex';
+        }
+        document.getElementById('edit-product-title').value = decodeURIComponent(title);
+        document.getElementById('edit-product-content').value = decodeURIComponent(content);
+    }
+
+    async function handleEditProduct(e) {
+        e.preventDefault();
+        const title = document.getElementById('edit-product-title').value;
+        const content = document.getElementById('edit-product-content').value;
+        const imageInput = document.getElementById('edit-product-image');
+        const imageFile = imageInput.files[0];
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        if (imageFile) formData.append('image', imageFile);
+        try {
+            const response = await fetch(`http://localhost:5000/product/${editingProductId}`, {
+                method: 'PUT',
+                body: formData
+            });
+            const data = await response.json();
+            if (response.ok) {
+                Toastify({ text: data.message || 'Product updated!', duration: 3000, gravity: "top", position: "center", backgroundColor: "#10b981", close: true }).showToast();
+                document.getElementById('edit-product-modal').remove();
+                loadProducts();
+            } else {
+                Toastify({ text: data.error || 'Failed to update product.', duration: 3000, gravity: "top", position: "center", backgroundColor: "#ef4444", close: true }).showToast();
+            }
+        } catch (err) {
+            Toastify({ text: 'Network error. Please try again.', duration: 3000, gravity: "top", position: "center", backgroundColor: "#ef4444", close: true }).showToast();
+        }
+    }
+
+    // Delete product
+    async function deleteProduct(id) {
+        if (!confirm('Are you sure you want to delete this product?')) return;
+        try {
+            const response = await fetch(`http://localhost:5000/product/${id}`, { method: 'DELETE' });
+            const data = await response.json();
+            if (response.ok) {
+                Toastify({ text: data.message || 'Product deleted!', duration: 3000, gravity: "top", position: "center", backgroundColor: "#10b981", close: true }).showToast();
+                loadProducts();
+            } else {
+                Toastify({ text: data.error || 'Failed to delete product.', duration: 3000, gravity: "top", position: "center", backgroundColor: "#ef4444", close: true }).showToast();
+            }
+        } catch (err) {
+            Toastify({ text: 'Network error. Please try again.', duration: 3000, gravity: "top", position: "center", backgroundColor: "#ef4444", close: true }).showToast();
+        }
+    }
+
+    // Fetch and display all products in a grid
+    async function loadProducts() {
+        const grid = document.getElementById('products-grid');
+        if (!grid) return;
+        grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">Loading products...</div>';
+        try {
+            const response = await fetch('http://localhost:5000/product');
+            const products = await response.json();
+            if (!Array.isArray(products) || products.length === 0) {
+                grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">No products found.</div>';
+                return;
+            }
+            grid.innerHTML = '';
+            products.forEach((product, i) => {
+                const card = document.createElement('div');
+                card.style = 'background:#fff;flex:1 1 calc(33.333% - 24px);max-width:calc(33.333% - 24px);min-width:280px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;';
+                card.innerHTML = `
+                    <img src="http://localhost:5000${product.image}" alt="Product Image" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0;">
+                    <h3 style="font-size:1.2rem;font-weight:600;color:#1f2937;margin-bottom:8px;">${product.title}</h3>
+                    <div style="color:#374151;font-size:0.98rem;">${product.content}</div>
+                    <div style="display:flex;gap:10px;margin-top:18px;">
+                        <button onclick="editProduct('${product._id}', '${encodeURIComponent(product.title)}', '${encodeURIComponent(product.content)}')" style="flex:1;padding:8px 0;background:#2563eb;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Edit</button>
+                        <button onclick="deleteProduct('${product._id}')" style="flex:1;padding:8px 0;background:#dc2626;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Delete</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        } catch (err) {
+            grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#e53e3e;">Error loading products.</div>';
+        }
+    }
+
+    // Load products on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('.add-product-form').addEventListener('submit', handleAddProduct);
+        loadProducts();
+    });
     </script>
 </body>
 </html>

@@ -54,10 +54,8 @@ async function handleLogin(event) {
             showToast('Login successful!', 'success');
             localStorage.setItem('isLoggedIn', 'true');
             isLoggedIn = true;
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
-            // Immediately show sidebar/dashboard after login
-            showSidebarDashboard();
+            // Redirect to dashboard after successful login
+            window.location.href = 'dashboard.html';
         } else {
             showMessage('login-message', data.error || 'Login failed', 'error');
             showToast(data.error || 'Login failed', 'error');
@@ -218,21 +216,8 @@ function logout() {
     isLoggedIn = false;
     // Show logout message
     showToast('Logged out successfully', 'success');
-    // Hide sidebar, show login page
-    const sidebar = document.getElementById('sidebar');
-    const loginPage = document.getElementById('login-page');
-    const registerPage = document.getElementById('register-page');
-    if (sidebar) sidebar.style.display = 'none';
-    if (loginPage) {
-        loginPage.classList.add('active');
-        loginPage.style.display = '';
-    }
-    if (registerPage) {
-        registerPage.classList.remove('active');
-        registerPage.style.display = '';
-    }
-    // Optionally update URL to /admin-panel/
-    window.history.pushState({}, '', '/admin-panel/');
+    // Redirect to login page
+    window.location.href = 'index.html';
 }
 
 // Initialize the application

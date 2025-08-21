@@ -1,3 +1,35 @@
+// Dynamically load products into the service cards grid on service.html
+document.addEventListener('DOMContentLoaded', function() {
+    const cardsGrid = document.querySelector('.cards-grid .row');
+    if (cardsGrid) {
+        fetch('http://localhost:5000/product')
+            .then(res => res.json())
+            .then(products => {
+                cardsGrid.innerHTML = '';
+                if (!Array.isArray(products) || products.length === 0) {
+                    cardsGrid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">No products found.</div>';
+                    return;
+                }
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'service-blocks';
+                    card.innerHTML = `
+                        <div class="card-icon">
+                            <img src="http://localhost:5000${product.image}" class="card-img-top" style="max-height:180px;object-fit:cover;">
+                            <div class="card-body">
+                                <h3 class="card-title">${product.title}</h3>
+                                <p class="card-text">${product.content}</p>
+                            </div>
+                        </div>
+                    `;
+                    cardsGrid.appendChild(card);
+                });
+            })
+            .catch(err => {
+                cardsGrid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#e53e3e;">Error loading products.</div>';
+            });
+    }
+});
 // script.js
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -1443,15 +1443,17 @@ a:link {
 
 .img-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
     margin: 2.5rem 0;
 }
 
 .sofa-image {
     width: 100%;
-    max-width: 752px;
+    max-width: 600px;
     height: auto;
-    aspect-ratio: 752/375;
+    margin-bottom: 40px;
     border-radius: 20px;
     box-shadow: 0 5px 15px #d9d9d9;
     object-fit: cover;
@@ -1504,7 +1506,7 @@ a:link {
     font-weight: 600;
     padding-left: 30px;
     padding-top: 20px;
-    color: #ffffff !important;
+    color: black !important;
 }
 
 .card-text {

@@ -57,4 +57,62 @@ router.post('/', upload.single('image'), async (req, res) => {
 	}
 });
 
+// Get all products
+router.get('/', async (req, res) => {
+	try {
+		const products = await Product.find().sort({ createdAt: -1 });
+		res.json(products);
+	} catch (err) {
+		res.status(500).json({ error: 'Server error: ' + err.message });
+	}
+});
+
+// Get a single product by ID
+router.get('/:id', async (req, res) => {
+	try {
+		const product = await Product.findById(req.params.id);
+		if (!product) {
+			return res.status(404).json({ error: 'Product not found' });
+		}
+		res.json(product);
+	} catch (err) {
+		res.status(500).json({ error: 'Server error: ' + err.message });
+	}
+});
+
+// Update a product
+router.put('/:id', upload.single('image'), async (req, res) => {
+	try {
+		const { title, content } = req.body;
+		let updateData = { title, content };
+		if (req.file) {
+			updateData.image = `/uploads/${req.file.filename}`;
+		}
+		const updatedProduct = await Product.findByIdAndUpdate(
+			req.params.id,
+			updateData,
+			{ new: true }
+		);
+		if (!updatedProduct) {
+			return res.status(404).json({ error: 'Product not found' });
+		}
+		res.json({ message: 'Product updated successfully!', product: updatedProduct });
+	} catch (err) {
+		res.status(500).json({ error: 'Server error: ' + err.message });
+	}
+});
+
+// Delete a product
+router.delete('/:id', async (req, res) => {
+	try {
+		const deleted = await Product.findByIdAndDelete(req.params.id);
+		if (!deleted) {
+			return res.status(404).json({ error: 'Product not found' });
+		}
+		res.json({ message: 'Product deleted successfully!' });
+	} catch (err) {
+		res.status(500).json({ error: 'Server error: ' + err.message });
+	}
+});
+
 export default router;

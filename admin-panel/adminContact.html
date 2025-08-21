@@ -9,7 +9,7 @@
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
     <div style="display:flex; min-height:100vh;">
-        <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
+        <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
                 <a href="/admin-panel/dashboard.html" style="color: white; text-decoration: none;">
                     <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
@@ -39,7 +39,7 @@
             </div>
         </nav>
         
-        <div class="main-content" style="flex: 1; padding: 24px;">
+        <div class="main-content" style="flex: 1; padding: 24px; margin-left: 256px;">
             <div style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                 <h2 style="margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Contact Messages</h2>
                 <div id="contacts-container" style="margin-top: 20px;">
