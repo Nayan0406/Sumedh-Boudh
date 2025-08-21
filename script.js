@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const cardsGrid = document.querySelector('.cards-grid .row');
     if (cardsGrid) {
-        fetch('http://localhost:5000/product')
+        fetch('https://sumedh-boudh-backend.vercel.app/product')
             .then(res => res.json())
             .then(products => {
                 cardsGrid.innerHTML = '';
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.className = 'service-blocks';
                     card.innerHTML = `
                         <div class="card-icon">
-                            <img src="http://localhost:5000${product.image}" class="card-img-top" style="max-height:180px;object-fit:cover;">
+                            <img src="https://sumedh-boudh-backend.vercel.app${product.image}" class="card-img-top" style="max-height:180px;object-fit:cover;">
                             <div class="card-body">
                                 <h3 class="card-title">${product.title}</h3>
                                 <p class="card-text">${product.content}</p>
