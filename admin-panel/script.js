@@ -2,6 +2,166 @@
 let isLoggedIn = false;
 let currentPage = 'login';
 
+// Session timeout variables
+let sessionTimeout;
+let warningTimeout;
+let lastActivityTime = Date.now();
+const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
+const WARNING_TIME = 5 * 60 * 1000; // Show warning 5 minutes before logout
+
+// Activity tracking events
+const activityEvents = ['click', 'keypress', 'scroll', 'mousemove', 'touchstart'];
+
+// Session management functions
+function initializeSessionTracking() {
+    if (!isLoggedIn) return;
+    
+    console.log('Session tracking initialized - 30 minute timeout');
+    updateLastActivity();
+    startSessionTimer();
+    startSessionDisplay();
+    
+    // Add activity listeners
+    activityEvents.forEach(event => {
+        document.addEventListener(event, updateLastActivity, true);
+    });
+}
+
+function startSessionDisplay() {
+    // Show session timer
+    const sessionTimer = document.getElementById('session-timer');
+    if (sessionTimer) {
+        sessionTimer.style.display = 'block';
+    }
+    
+    // Update session countdown every second
+    const updateDisplay = () => {
+        if (!isLoggedIn) return;
+        
+        const elapsed = Date.now() - lastActivityTime;
+        const remaining = SESSION_DURATION - elapsed;
+        
+        if (remaining <= 0) {
+            return; // Will be handled by session expiry
+        }
+        
+        const minutes = Math.floor(remaining / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+        
+        const countdownElement = document.getElementById('session-countdown');
+        if (countdownElement) {
+            countdownElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color when less than 5 minutes remaining
+            const sessionTimer = document.getElementById('session-timer');
+            if (sessionTimer) {
+                if (remaining < WARNING_TIME) {
+                    sessionTimer.style.background = 'rgba(239, 68, 68, 0.1)';
+                    sessionTimer.style.color = '#ef4444';
+                } else {
+                    sessionTimer.style.background = 'rgba(59, 130, 246, 0.1)';
+                    sessionTimer.style.color = '#3b82f6';
+                }
+            }
+        }
+        
+        // Continue updating if user is still logged in
+        if (isLoggedIn) {
+            setTimeout(updateDisplay, 1000);
+        }
+    };
+    
+    updateDisplay();
+}
+
+function updateLastActivity() {
+    lastActivityTime = Date.now();
+    
+    // Clear existing timers
+    if (sessionTimeout) clearTimeout(sessionTimeout);
+    if (warningTimeout) clearTimeout(warningTimeout);
+    
+    // Only restart timers if user is logged in
+    if (isLoggedIn) {
+        startSessionTimer();
+    }
+}
+
+function startSessionTimer() {
+    // Set warning timer (25 minutes - 5 minutes before logout)
+    warningTimeout = setTimeout(() => {
+        showSessionWarning();
+    }, SESSION_DURATION - WARNING_TIME);
+    
+    // Set logout timer (30 minutes)
+    sessionTimeout = setTimeout(() => {
+        handleSessionExpiry();
+    }, SESSION_DURATION);
+}
+
+function showSessionWarning() {
+    if (!isLoggedIn) return;
+    
+    const userChoice = confirm(
+        'Your session will expire in 5 minutes due to inactivity.\n\n' +
+        'Click "OK" to extend your session or "Cancel" to logout now.'
+    );
+    
+    if (userChoice) {
+        // User wants to extend session
+        updateLastActivity();
+        showToast('Session extended successfully', 'success');
+    } else {
+        // User chose to logout
+        handleSessionExpiry();
+    }
+}
+
+function handleSessionExpiry() {
+    console.log('Session expired due to inactivity');
+    
+    // Clear activity listeners
+    activityEvents.forEach(event => {
+        document.removeEventListener(event, updateLastActivity, true);
+    });
+    
+    // Clear timers
+    if (sessionTimeout) clearTimeout(sessionTimeout);
+    if (warningTimeout) clearTimeout(warningTimeout);
+    
+    // Clear session data
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('sessionStartTime');
+    isLoggedIn = false;
+    
+    // Show session expired message
+    showToast('Session expired due to inactivity. Please login again.', 'error');
+    
+    // Redirect to login page after short delay
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 2000);
+}
+
+function clearSessionTracking() {
+    // Clear timers
+    if (sessionTimeout) clearTimeout(sessionTimeout);
+    if (warningTimeout) clearTimeout(warningTimeout);
+    
+    // Remove activity listeners
+    activityEvents.forEach(event => {
+        document.removeEventListener(event, updateLastActivity, true);
+    });
+    
+    // Hide session timer
+    const sessionTimer = document.getElementById('session-timer');
+    if (sessionTimer) {
+        sessionTimer.style.display = 'none';
+    }
+    
+    console.log('Session tracking cleared');
+}
+
 // Page navigation
 function showPage(pageId) {
     // Hide all pages
@@ -53,7 +213,12 @@ async function handleLogin(event) {
             showMessage('login-message', data.message || 'Login successful!', 'success');
             showToast('Login successful!', 'success');
             localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('sessionStartTime', Date.now().toString());
             isLoggedIn = true;
+            
+            // Initialize session tracking
+            initializeSessionTracking();
+            
             // Redirect to dashboard after successful login
             window.location.href = 'dashboard.html';
         } else {
@@ -211,11 +376,17 @@ function showToast(message, type) {
 }
 
 function logout() {
+    // Clear session tracking
+    clearSessionTracking();
+    
     // Clear authentication data
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('sessionStartTime');
     isLoggedIn = false;
+    
     // Show logout message
     showToast('Logged out successfully', 'success');
+    
     // Redirect to login page
     window.location.href = 'index.html';
 }
@@ -224,9 +395,28 @@ function logout() {
 function initializeApp() {
     // Check if user is already logged in
     const savedLoginState = localStorage.getItem('isLoggedIn');
-    if (savedLoginState === 'true') {
-        isLoggedIn = true;
-        showPage('add-blog');
+    const sessionStartTime = localStorage.getItem('sessionStartTime');
+    
+    if (savedLoginState === 'true' && sessionStartTime) {
+        const sessionAge = Date.now() - parseInt(sessionStartTime);
+        
+        // Check if session is still valid (less than 30 minutes old)
+        if (sessionAge < SESSION_DURATION) {
+            isLoggedIn = true;
+            console.log('Restoring existing session, age:', Math.round(sessionAge / 1000 / 60), 'minutes');
+            
+            // Initialize session tracking for existing session
+            initializeSessionTracking();
+            
+            showPage('add-blog');
+        } else {
+            // Session expired, clear it
+            console.log('Session expired, clearing...');
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('sessionStartTime');
+            showToast('Previous session expired. Please login again.', 'error');
+            showPage('login');
+        }
     } else {
         showPage('login');
     }
