@@ -173,14 +173,14 @@ offers are built from embodiment, and success begins in your nervous system. 
                         : blog.content;
                     
                     container.innerHTML += `
-                        <div class="voice-section">
+                        <div class="voice-section" style="cursor:pointer;">
                             <div class="text-content">
-                                <h1><i class="fa-solid fa-play" style="margin-right: 5px;"></i>${blog.title}</h1>
-                                <p>${shortContent}</p>
+                                <h1 style="cursor:pointer;" onclick="openBlog('${blog._id}')"><i class="fa-solid fa-play" style="margin-right: 5px;"></i>${blog.title}</h1>
+                                <p style="cursor:pointer;" onclick="openBlog('${blog._id}')">${shortContent}</p>
                                 <p class="cta">By: ${blog.author || 'Anonymous'}</p>
                             </div>
                             <div class="know-more">
-                                <button><a href="blog-detail.html?id=${blog._id}">KNOW MORE</a></button>
+                                <button onclick="openBlog('${blog._id}')">Read Full Blog</button>
                             </div>
                         </div>
                     `;
@@ -202,6 +202,10 @@ offers are built from embodiment, and success begins in your nervous system. 
         
         // Load blogs when page loads
         document.addEventListener('DOMContentLoaded', loadBlogs);
+        // Blog card click handler
+        function openBlog(blogId) {
+            window.location.href = `blog-detail.html?id=${blogId}`;
+        }
     </script>
 
 <section class="ideas-impact-section">

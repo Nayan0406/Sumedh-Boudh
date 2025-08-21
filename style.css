@@ -1259,7 +1259,8 @@ header.scrolled {
 .voice-container {
     max-width: 1400px;
     margin: 26px auto;
-    padding: 40px 0px;
+    padding: 60px 0px;
+    cursor: pointer;
 }
 
 .voice-section {
@@ -2919,7 +2920,7 @@ a:link {
     }
 
     .voice-container {
-        padding: 30px 15px;
+        padding: 40px 15px;
     }
 
     .voice-section {
