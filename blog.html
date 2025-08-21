@@ -6,10 +6,29 @@
     <title>Blog</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Overlay for mobile menu */
+        .nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+        .nav-overlay.active {
+            display: block;
+        }
+        @media (max-width: 480px) {
+            body.menu-open {
+                overflow: hidden;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
     <nav class="custom-nav">
+    <div class="nav-overlay" id="nav-overlay"></div>
     <script>
     // Make navbar black on scroll
     window.addEventListener('scroll', function() {
@@ -19,6 +38,51 @@
         } else {
             header.classList.remove('scrolled');
         }
+    });
+
+    // Mobile menu toggle logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navCenter = document.querySelector('.nav-center');
+        const navOverlay = document.getElementById('nav-overlay');
+        const body = document.body;
+
+        function closeMenu() {
+            navCenter.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            navOverlay.classList.remove('active');
+            body.classList.remove('menu-open');
+        }
+
+        mobileMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isActive = navCenter.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            navOverlay.classList.toggle('active');
+            if (isActive) {
+                body.classList.add('menu-open');
+            } else {
+                body.classList.remove('menu-open');
+            }
+        });
+
+        navOverlay.addEventListener('click', closeMenu);
+
+        // Close menu on nav link click (mobile only)
+        document.querySelectorAll('.nav-center a').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 480) {
+                    closeMenu();
+                }
+            });
+        });
+
+        // Close menu on resize to desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 480) {
+                closeMenu();
+            }
+        });
     });
     </script>
             <div class="nav-left">

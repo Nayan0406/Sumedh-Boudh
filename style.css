@@ -905,7 +905,7 @@ header.scrolled {
     font-weight: 800;
     line-height: 100%;
     text-transform: uppercase;
-    margin: 60px 70px 0px 0px;
+    margin: 33px 70px 0px 0px;
 }
 
 .footer-navigation {
@@ -934,7 +934,7 @@ header.scrolled {
 }
 
 .nav-links {
-    width: 550px;
+    /* width: 550px; */
     height: 25px;
     list-style: none;
     padding: 0;
@@ -3536,6 +3536,9 @@ a:link {
 }
 
 @media (max-width: 480px) {
+    .custom-nav {
+        padding: 20px 20px;
+    }
     .custom-nav .nav-center {
         display: none !important;
         position: absolute;
