@@ -400,7 +400,7 @@ header.scrolled {
     height: 320px;
     overflow: hidden;
     position: relative;
-    padding: 0 20px;
+    padding: 0 0;
 }
 
 .strategy-image-full img.stat-number {
@@ -1369,7 +1369,7 @@ a:link {
         display: none;
     }
     .service-card {
-        min-width: 390px !important;
+        min-width: 377px !important;
         width: 80vw !important;
         max-width: 340px;
         margin-right: 12px;
@@ -2894,7 +2894,7 @@ a:link {
     }
 
     .strategy-container {
-        padding: 0 20px;
+        padding: 0 6px;
     }
 
     .strategy-heading {
