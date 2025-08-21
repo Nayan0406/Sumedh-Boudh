@@ -1837,9 +1837,10 @@ a:link {
 .message-title {
     font-family: 'Abhaya Libre', serif;
     font-size: clamp(36px, 5vw, 76px);
-    font-weight: 800;
+    font-weight: 600;
     line-height: 1;
     margin-bottom: 30px;
+    color: white;
 }
 
 .message-content {
@@ -1892,7 +1893,7 @@ a:link {
 
 .contact-form h1,
 .contact-info h1 {
-    font-size: 40px;
+    font-size: 25px;
     margin-bottom: 40px;
     font-weight: 400;
     text-align: center;
