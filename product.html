@@ -11,7 +11,18 @@
 </head>
 <body style="background:#000;">
     <header>
-        <nav class="custom-nav">
+    <nav class="custom-nav">
+    <script>
+    // Make navbar black on scroll
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if (window.scrollY > 10) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+    </script>
             <div class="nav-left">
                 <div class="logo">
                     <a href="index.html">
