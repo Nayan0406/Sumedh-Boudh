@@ -8,8 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" style="z-index: 1002;">
+        ☰
+    </button>
+    
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
     <div style="display:flex; min-height:100vh;">
-    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;">
+    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
                 <a href="/admin-panel/dashboard.html" style="color: white; text-decoration: none;">
                     <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
@@ -17,17 +25,17 @@
             </div>
             <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
                 <li style="margin-bottom: 8px;">
-                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; z-index: 1001; position: relative;">
                         <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; z-index: 1001; position: relative;">
                         <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; z-index: 1001; position: relative;">
                         <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Form
                     </a>
                 </li>
@@ -38,9 +46,10 @@
                 </button>
             </div>
         </nav>
-        <div class="add-product-container" style="flex:1; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin-left: 256px;">
+        <div class="add-product-container main-content mobile-padding" style="flex:1; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin-left: 256px; padding: 40px 20px;">
             <form class="add-product-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px; margin-bottom: 40px;">
                 <h2 style="text-align: center; margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Add Product</h2>
+                <div id="product-message" class="message" style="display: none; margin-bottom: 16px; padding: 12px; border-radius: 4px;"></div>
                 <div class="form-group" style="margin-bottom: 16px;">
                     <label for="product-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
                     <input type="text" id="product-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
@@ -59,7 +68,7 @@
             <!-- Products Grid Section (now directly below the form) -->
             <div id="products-section" style="width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;">
                 <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; color: #1f2937;">All Products</h2>
-                <div id="products-grid" style="display: flex; flex-wrap: wrap; gap: 24px;"></div>
+                <div id="products-grid" class="products-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; margin-top: 32px;"></div>
             </div>
         </div>
 
@@ -235,6 +244,7 @@
                 return;
             }
             grid.innerHTML = '';
+            
             products.forEach((product, i) => {
                 // Handle both Cloudinary URLs and local paths
                 let imageUrl = product.image;
@@ -249,14 +259,14 @@
                 }
 
                 const card = document.createElement('div');
-                card.style = 'background:#fff;flex:1 1 calc(33.333% - 24px);max-width:calc(33.333% - 24px);min-width:280px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;';
+                card.className = 'product-card';
                 card.innerHTML = `
-                    <img src="${imageUrl}" alt="Product Image" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0;">
-                    <h3 style="font-size:1.2rem;font-weight:600;color:#1f2937;margin-bottom:8px;">${product.title}</h3>
-                    <div style="color:#374151;font-size:0.98rem;">${limitedContent}</div>
-                    <div style="display:flex;gap:10px;margin-top:18px;">
-                        <button onclick="editProduct('${product._id}', '${encodeURIComponent(product.title)}', '${encodeURIComponent(product.content)}')" style="flex:1;padding:8px 0;background:#2563eb;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Edit</button>
-                        <button onclick="deleteProduct('${product._id}')" style="flex:1;padding:8px 0;background:#dc2626;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Delete</button>
+                    <img src="${imageUrl}" alt="Product Image" style="width:100%;height:200px;object-fit:cover;border-radius:8px;margin-bottom:16px;">
+                    <h3 style="font-size:1.25rem;font-weight:600;color:#1f2937;margin:0 0 12px 0;line-height:1.4;">${product.title}</h3>
+                    <p style="color:#6b7280;font-size:0.95rem;line-height:1.5;margin:0 0 16px 0;flex-grow:1;">${limitedContent}</p>
+                    <div class="actions" style="display:flex;gap:12px;margin-top:auto;">
+                        <button onclick="editProduct('${product._id}', '${encodeURIComponent(product.title)}', '${encodeURIComponent(product.content)}')" class="btn-edit" style="flex:1;padding:10px 16px;background:#2563eb;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.9rem;font-weight:600;transition:background 0.2s;">Edit</button>
+                        <button onclick="deleteProduct('${product._id}')" class="btn-delete" style="flex:1;padding:10px 16px;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:0.9rem;font-weight:600;transition:background 0.2s;">Delete</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -266,10 +276,70 @@
         }
     }
 
+    // Check if user is logged in
+    function checkAuth() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn || isLoggedIn !== 'true') {
+            window.location.href = 'index.html';
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = 'index.html';
+    }
+
+    // Mobile sidebar functions
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+
     // Load products on page load
     document.addEventListener('DOMContentLoaded', function() {
+        checkAuth();
         document.querySelector('.add-product-form').addEventListener('submit', handleAddProduct);
         loadProducts();
+
+        // Debug function to test sidebar clicks
+        console.log('AdminProduct page loaded, sidebar should be clickable');
+        
+        // Test if sidebar elements are properly accessible
+        const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+        console.log('Found sidebar links:', sidebarLinks.length);
+        
+        sidebarLinks.forEach((link, index) => {
+            console.log(`Link ${index + 1}:`, link.href);
+        });
+
+        // Close sidebar when clicking on navigation links (mobile)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                console.log('Nav link clicked:', this.href);
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Close sidebar on window resize if desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
     });
     </script>
 </body>

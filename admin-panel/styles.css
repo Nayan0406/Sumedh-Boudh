@@ -21,6 +21,69 @@ body {
     color: white;
     display: flex;
     flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 1000;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+/    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    
+    .contacts-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    
+    /* Contact Cards */
+    .contact-card {
+        padding: 20px;
+        margin-bottom: 16px;
+    }nu Button */
+.mobile-menu-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background-color: #1f2937;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-menu-btn:hover {
+    background-color: #374151;
+}
+
+/* Overlay for mobile sidebar */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.sidebar-overlay.active {
+    display: block;
 }
 
 .sidebar-header {
@@ -100,6 +163,13 @@ body {
 .main-content {
     flex: 1;
     overflow-y: auto;
+    margin-left: 256px;
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+}
+
+.main-content.sidebar-collapsed {
+    margin-left: 0;
 }
 
 .page {
@@ -288,6 +358,60 @@ body {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
+/* Responsive Grid for Products */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.product-card .btn-edit:hover {
+    background: #1d4ed8 !important;
+}
+
+.product-card .btn-delete:hover {
+    background: #b91c1c !important;
+}
+
+/* Responsive Grid for Contacts */
+.contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.contact-card {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contact-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
 /* Sidebar Toggle Button */
 .sidebar-toggle {
     display: none;
@@ -309,18 +433,6 @@ body {
     background: #374151;
 }
 
-/* Mobile Overlay */
-.sidebar-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
     .blogs-grid {
@@ -328,80 +440,207 @@ body {
         gap: 20px;
     }
     
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .contacts-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
     .login-container,
     .register-container,
     .add-blog-container,
+    .add-product-container,
     .contact-container {
         padding: 0 20px;
     }
 }
 
 @media (max-width: 768px) {
+    /* Mobile Sidebar */
     .sidebar {
+        width: 280px;
+        transform: translateX(-100%);
         position: fixed !important;
         top: 0;
-        left: -256px;
+        left: 0;
         height: 100vh;
         z-index: 1000;
-        transition: left 0.3s ease;
+        transition: transform 0.3s ease;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
     
     .sidebar.open {
-        left: 0;
+        transform: translateX(0);
     }
     
-    .sidebar-toggle {
+    /* Mobile Menu Button */
+    .mobile-menu-btn {
+        display: block !important;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background-color: #1f2937;
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 18px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .mobile-menu-btn:hover {
+        background-color: #374151;
+    }
+    
+    /* Sidebar Overlay */
+    .sidebar-overlay.active {
         display: block;
     }
     
+    /* Main Content */
     .main-content {
         margin-left: 0 !important;
+        padding: 70px 15px 20px 15px !important;
         width: 100%;
     }
     
+    .main-content.mobile-padding {
+        padding-top: 70px !important;
+    }
+    
+    /* Content Containers */
     .add-blog-container,
+    .add-product-container,
     .contact-container {
         margin-left: 0 !important;
-        padding: 80px 16px 32px 16px;
-        min-height: calc(100vh - 80px);
+        padding: 80px 12px 20px 12px !important;
+        min-height: calc(100vh - 60px);
     }
     
-    .blogs-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        margin-top: 24px;
-    }
-    
+    /* Page Content */
     .page {
-        padding: 20px 16px;
+        padding: 70px 15px 20px 15px;
     }
     
-    .login-form,
-    .register-form,
-    .add-blog-form {
-        padding: 24px 20px;
-        margin: 0;
-        max-width: 100%;
+    /* Sidebar Components */
+    .sidebar-header {
+        padding: 16px;
+    }
+    
+    .sidebar-header h2 {
+        font-size: 20px;
     }
     
     .sidebar-nav {
         padding: 12px;
     }
     
-    .sidebar-header {
-        padding: 16px;
+    .nav-link {
+        padding: 14px 12px;
+        font-size: 15px;
+    }
+    
+    .nav-link span:first-child {
+        margin-right: 10px;
+        font-size: 16px;
     }
     
     .sidebar-footer {
         padding: 12px;
     }
+    
+    .logout-btn {
+        padding: 12px;
+        font-size: 15px;
+    }
+    
+    /* Forms */
+    .login-form,
+    .register-form,
+    .add-blog-form,
+    .add-product-form {
+        padding: 24px 16px;
+        margin: 0 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .btn {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    /* Blog Grid */
+    .blogs-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    
+    .blog-card {
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .product-card {
+        padding: 20px;
+        margin-bottom: 16px;
+    }
+    
+    /* Product Grid */
+    .products-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    
+    /* Contact Cards */
+    .contact-card {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
 }
 
+/* Small Mobile Devices */
 @media (max-width: 480px) {
     .sidebar {
-        width: 280px;
-        left: -280px;
+        width: 100%;
+    }
+    
+    .mobile-menu-btn {
+        top: 10px;
+        left: 10px;
+        padding: 10px;
+    }
+    
+    .main-content {
+        padding: 60px 10px 15px 10px !important;
+    }
+    
+    .add-blog-container,
+    .add-product-container,
+    .contact-container {
+        padding: 70px 8px 16px 8px !important;
+    }
+    
+    .login-form,
+    .register-form,
+    .add-blog-form,
+    .add-product-form {
+        padding: 20px 12px;
+        margin: 0 5px;
+        max-width: calc(100% - 10px);
     }
     
     .blogs-grid {
@@ -412,15 +651,38 @@ body {
         padding: 16px;
     }
     
-    .login-form,
-    .register-form,
-    .add-blog-form {
-        padding: 20px 16px;
+    .products-grid {
+        gap: 12px;
     }
     
-    .add-blog-container,
-    .contact-container {
-        padding: 60px 12px 20px 12px;
+    .product-card {
+        padding: 16px;
+    }
+    
+    .contacts-grid {
+        gap: 12px;
+    }
+    
+    .contact-card {
+        padding: 16px;
+    }
+    
+    .sidebar-header {
+        padding: 12px;
+    }
+    
+    .sidebar-nav {
+        padding: 10px;
+    }
+    
+    .nav-link {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+    
+    .logout-btn {
+        padding: 10px;
+        font-size: 14px;
     }
     
     .form-group input,
@@ -433,39 +695,77 @@ body {
         padding: 10px;
         font-size: 14px;
     }
-    
-    .sidebar-header h2 {
-        font-size: 20px;
-    }
-    
-    .nav-link {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    .logout-btn {
-        padding: 10px;
-        font-size: 14px;
-    }
-}
-
-/* Landscape tablets */
-@media (max-width: 1024px) and (orientation: landscape) {
-    .blogs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
 }
 
 /* Very small screens */
 @media (max-width: 320px) {
+    .sidebar {
+        width: 100%;
+    }
+    
+    .main-content {
+        padding: 55px 8px 12px 8px !important;
+    }
+    
     .add-blog-container,
+    .add-product-container,
     .contact-container {
-        padding: 60px 8px 16px 8px;
+        padding: 60px 8px 16px 8px !important;
     }
     
     .login-form,
     .register-form,
-    .add-blog-form {
-        padding: 16px 12px;
+    .add-blog-form,
+    .add-product-form {
+        padding: 16px 8px;
+        margin: 0;
+        max-width: 100%;
+    }
+    
+    .mobile-menu-btn {
+        top: 8px;
+        left: 8px;
+        padding: 8px;
+        font-size: 16px;
+    }
+}
+
+/* Debug styles for sidebar links - Added for fix */
+.sidebar .nav-link {
+    z-index: 1001 !important;
+    position: relative !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    display: block !important;
+    width: 100% !important;
+    min-height: 40px !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #2a3f5f !important;
+    color: white !important;
+}
+
+.sidebar .nav-link:active {
+    background-color: #1e2e44 !important;
+}
+
+/* Enhanced mobile menu button */
+.mobile-menu-btn {
+    z-index: 1002 !important;
+    position: fixed !important;
+    pointer-events: auto !important;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure sidebar overlay doesn't interfere */
+.sidebar-overlay {
+    pointer-events: auto !important;
+}
+
+.sidebar-overlay.active {
+    z-index: 999 !important;
+}
     }
 }

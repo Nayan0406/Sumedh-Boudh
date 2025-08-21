@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>Admin Panel - Contact Messages</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" style="z-index: 1002;">
+        ☰
+    </button>
+    
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
     <div style="display:flex; min-height:100vh;">
-        <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;">
+        <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
                 <a href="/admin-panel/dashboard.html" style="color: white; text-decoration: none;">
                     <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
@@ -17,17 +25,17 @@
             </div>
             <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
                 <li style="margin-bottom: 8px;">
-                    <a href="adminBlog.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminBlog.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; z-index: 1001; position: relative;">
                         <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminProduct.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminProduct.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; z-index: 1001; position: relative;">
                         <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminContact.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; background-color: #374151;">
+                    <a href="adminContact.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; background-color: #374151; z-index: 1001; position: relative;">
                         <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Messages
                     </a>
                 </li>
@@ -39,10 +47,10 @@
             </div>
         </nav>
         
-        <div class="main-content" style="flex: 1; padding: 24px; margin-left: 256px;">
-            <div style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <div class="contact-container main-content mobile-padding" style="flex: 1; padding: 40px 24px; margin-left: 256px;">
+            <div style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 32px;">
                 <h2 style="margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Contact Messages</h2>
-                <div id="contacts-container" style="margin-top: 20px;">
+                <div id="contacts-container" class="contacts-grid" style="margin-top: 20px;">
                     <div id="loading" style="text-align: center; padding: 40px; color: #6b7280;">
                         Loading contacts...
                     </div>
@@ -69,20 +77,22 @@
                 loadingDiv.style.display = 'none';
                 
                 const contactsHTML = contacts.map(contact => `
-                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 16px; background: #f9fafb;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                            <h3 style="margin: 0; font-size: 18px; color: #1f2937;">${contact.name}</h3>
-                            <span style="font-size: 14px; color: #6b7280;">${new Date(contact.createdAt).toLocaleDateString()}</span>
+                    <div class="contact-card" style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; background: white; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07); transition: transform 0.2s, box-shadow 0.2s;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px; flex-wrap: wrap;">
+                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #1f2937;">${contact.name}</h3>
+                            <span style="font-size: 0.875rem; color: #6b7280; margin-top: 4px;">${new Date(contact.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong style="color: #374151; font-weight: 500;">📞 Phone:</strong> 
+                            <span style="color: #6b7280; margin-left: 8px;">${contact.number}</span>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong style="color: #374151; font-weight: 500;">📧 Email:</strong> 
+                            <span style="color: #6b7280; margin-left: 8px;">${contact.email}</span>
                         </div>
                         <div style="margin-bottom: 8px;">
-                            <strong style="color: #374151;">Phone:</strong> <span style="color: #6b7280;">${contact.number}</span>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong style="color: #374151;">Email:</strong> <span style="color: #6b7280;">${contact.email}</span>
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong style="color: #374151;">Message:</strong> 
-                            <p style="margin: 4px 0 0 0; color: #6b7280; line-height: 1.5;">${contact.message}</p>
+                            <strong style="color: #374151; font-weight: 500;">💬 Message:</strong> 
+                            <p style="margin: 8px 0 0 0; color: #6b7280; line-height: 1.6; background: #f9fafb; padding: 12px; border-radius: 6px; border-left: 3px solid #3b82f6;">${contact.message}</p>
                         </div>
                     </div>
                 `).join('');
@@ -96,12 +106,70 @@
             }
         }
         
+        // Check if user is logged in
+        function checkAuth() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn || isLoggedIn !== 'true') {
+                window.location.href = 'index.html';
+            }
+        }
+
         function logout() {
-            window.location.href = 'login.html';
+            localStorage.removeItem('isLoggedIn');
+            window.location.href = 'index.html';
+        }
+
+        // Mobile sidebar functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
         }
         
         // Load contacts when page loads
-        window.addEventListener('load', loadContacts);
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadContacts();
+
+            // Debug function to test sidebar clicks
+            console.log('AdminContact page loaded, sidebar should be clickable');
+            
+            // Test if sidebar elements are properly accessible
+            const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+            console.log('Found sidebar links:', sidebarLinks.length);
+            
+            sidebarLinks.forEach((link, index) => {
+                console.log(`Link ${index + 1}:`, link.href);
+            });
+
+            // Close sidebar when clicking on navigation links (mobile)
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    console.log('Nav link clicked:', this.href);
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Close sidebar on window resize if desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
+        });
     </script>
 </body>
 </html>

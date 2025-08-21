@@ -10,6 +10,14 @@
 </head>
 <body>
     <div id="login-app" class="app">
+        <!-- Mobile menu button -->
+        <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" style="display:none;">
+            ☰
+        </button>
+        
+        <!-- Sidebar overlay for mobile -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+        
         <!-- Sidebar (hidden by default) -->
         <nav id="sidebar" class="sidebar" style="display:none; width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
@@ -38,7 +46,7 @@
                 </button>
             </div>
         </nav>
-        <main class="main-content">
+        <main class="main-content mobile-padding">
             <!-- Login Page -->
             <div id="login-page" class="page">
                 <div class="login-container">
@@ -109,16 +117,20 @@
             const loginPage = document.getElementById('login-page');
             const registerPage = document.getElementById('register-page');
             const sidebar = document.getElementById('sidebar');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            
             // Check login state
             const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
             if (isLoggedIn) {
                 // Show sidebar, hide auth pages
                 sidebar.style.display = 'flex';
+                mobileMenuBtn.style.display = 'block';
                 loginPage.style.display = 'none';
                 registerPage.style.display = 'none';
             } else {
                 // Hide sidebar, show correct auth page
                 sidebar.style.display = 'none';
+                mobileMenuBtn.style.display = 'none';
                 if (window.location.pathname.endsWith('/register')) {
                     loginPage.classList.remove('active');
                     registerPage.classList.add('active');
@@ -129,6 +141,23 @@
                 loginPage.style.display = '';
                 registerPage.style.display = '';
             }
+        }
+
+        // Mobile sidebar functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
         }
 
         // Show dashboard page and keep sidebar visible
@@ -164,6 +193,23 @@
                 showAuthPage();
             };
             window.addEventListener('popstate', showAuthPage);
+
+            // Close sidebar when clicking on navigation links (mobile)
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // Close sidebar on window resize if desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeSidebar();
+                }
+            });
         });
         </script>
         <script src="script.js"></script>

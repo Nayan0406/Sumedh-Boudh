@@ -26,9 +26,41 @@
     <script>
     document.getElementById('login-form').addEventListener('submit', async function(event) {
         event.preventDefault();
-        // You can add real authentication here
-        // For now, just redirect to dashboard.html
-        window.location.href = window.location.origin + '/admin-panel/dashboard.html';
+        
+        // Get form values
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Basic validation (you can add real authentication here)
+        if (email && password) {
+            // Set login flag in localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            
+            // Show success message
+            Toastify({
+                text: "Login successful!",
+                duration: 2000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#10b981",
+            }).showToast();
+            
+            // Redirect to dashboard.html after a short delay
+            setTimeout(() => {
+                window.location.href = window.location.origin + '/admin-panel/dashboard.html';
+            }, 1000);
+        } else {
+            // Show error message
+            Toastify({
+                text: "Please enter both email and password",
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "center",
+                backgroundColor: "#ef4444",
+            }).showToast();
+        }
     });
     </script>
 </body>

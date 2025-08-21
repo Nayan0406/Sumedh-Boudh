@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()">
+        ☰
+    </button>
+    
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
     <div style="display:flex; min-height:100vh;">
         <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
@@ -38,7 +46,7 @@
                 </button>
             </div>
         </nav>
-        <div class="main-content" style="flex: 1; padding: 40px;">
+        <div class="main-content mobile-padding" style="flex: 1; padding: 40px;">
             <div style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                 <h1 style="font-size: 32px; font-weight: bold; color: #1f2937; margin-bottom: 16px;">Welcome to the Admin Dashboard</h1>
                 <!-- <p style="font-size: 18px; color: #374151;">Use the sidebar to manage blogs, products, and contact messages.</p> -->
@@ -62,6 +70,42 @@
         localStorage.removeItem('isLoggedIn');
         window.location.href = 'index.html';
     }
+
+    // Mobile sidebar functions
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+
+    // Close sidebar when clicking on navigation links (mobile)
+    document.addEventListener('DOMContentLoaded', function() {
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Close sidebar on window resize if desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
+    });
     </script>
 </body>
 </html>

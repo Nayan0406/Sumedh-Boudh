@@ -3,153 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Panel</title>
+    <title>Admin Panel - Blogs</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
     <style>
     /* Responsive grid for blogs */
-    #blogs-grid {
-        display: flex;
-        flex-wrap: wrap;
+    .blogs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 24px;
+        margin-top: 30px;
     }
-    #blogs-grid > div {
-        flex: 1 1 calc(33.333% - 24px);
-        max-width: calc(33.333% - 24px);
-        min-width: 260px;
-        box-sizing: border-box;
+    
+    .blog-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 24px;
+        border: 1px solid #e5e7eb;
     }
-    @media (max-width: 900px) {
-        #blogs-grid > div {
-            flex: 1 1 calc(50% - 24px);
-            max-width: calc(50% - 24px);
-        }
+    
+    .blog-card h3 {
+        margin: 0 0 12px 0;
+        color: #1f2937;
+        font-size: 18px;
+        font-weight: 600;
     }
-    @media (max-width: 600px) {
-        #blogs-grid {
-            gap: 16px;
-        }
-        #blogs-grid > div {
-            flex: 1 1 100%;
-            max-width: 100%;
-            min-width: 0;
-        }
-        .add-blog-container {
-            margin-left: 0 !important;
-            padding: 0 8px !important;
-        }
-        .sidebar {
-            position: fixed;
-            left: -256px;
-            top: 0;
-            width: 220px !important;
-            transition: left 0.3s;
-            z-index: 2000;
-        }
-        .sidebar.open {
-            left: 0;
-        }
-        .sidebar-header {
-            padding: 16px !important;
-        }
-        .sidebar-footer {
-            padding: 12px !important;
-        }
-        .sidebar-toggle {
-            display: block !important;
-        }
+    
+    .blog-card p {
+        margin: 0 0 8px 0;
+        color: #6b7280;
+        line-height: 1.5;
     }
-    @media (max-width: 600px) {
-        .add-blog-form {
-            padding: 18px 8px 16px 8px !important;
-            max-width: 100% !important;
-        }
-        .add-blog-container {
-            min-height: unset !important;
-        }
+    
+    .blog-card .meta {
+        font-size: 14px;
+        color: #9ca3af;
+        margin-bottom: 16px;
     }
-    .sidebar-toggle {
-        display: none;
-        position: fixed;
-        top: 18px;
-        left: 18px;
-        background: #1f2937;
-        color: #fff;
+    
+    .blog-card .actions {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-edit {
+        background: #3b82f6;
+        color: white;
         border: none;
-        border-radius: 5px;
-        padding: 8px 12px;
-        font-size: 1.3rem;
-        z-index: 2100;
+        padding: 6px 12px;
+        border-radius: 4px;
         cursor: pointer;
+        font-size: 14px;
+    }
+    
+    .btn-delete {
+        background: #ef4444;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+    
+    /* Ensure sidebar links are clickable */
+    .sidebar .nav-link {
+        cursor: pointer;
+        pointer-events: auto;
+    }
+    
+    .sidebar .nav-link:hover {
+        background-color: #374151 !important;
     }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.css">
 </head>
 <body style="margin:0; padding:0; background:#f3f4f6;">
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" style="z-index: 1002;">
+        ☰
+    </button>
+    
+    <!-- Sidebar overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+    
     <div style="display:flex; min-height:100vh;">
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Open sidebar">☰</button>
-    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;">
+    <nav id="sidebar" class="sidebar" style="width: 256px; background-color: #1f2937; color: white; flex-direction: column; position: fixed; top: 0; left: 0; height: 100vh; z-index: 1000;">
             <div class="sidebar-header" style="padding: 24px; border-bottom: 1px solid #374151; text-align: center;">
-                <a href="/admin-panel/dashboard.html" style="color: white; text-decoration: none;">
+                <a href="/admin-panel/dashboard.html" style="color: white; text-decoration: none; position: relative; z-index: 1001;">
                     <h2 style="font-size: 24px; font-weight: bold; margin:0;">Admin Panel</h2>
                 </a>
             </div>
-            <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none;">
+            <ul class="sidebar-nav" style="flex: 1; padding: 16px; list-style: none; margin: 0;">
                 <li style="margin-bottom: 8px;">
-                    <a href="adminBlog.html" class="nav-link" onclick="showDashboardPage('add-blog')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminBlog.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; background-color: #374151; position: relative; z-index: 1001;">
                         <span style="margin-right: 12px; font-size: 18px;">📝</span> Add Blog
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminProduct.html" class="nav-link" onclick="showDashboardPage('add-product')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
+                    <a href="adminProduct.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; position: relative; z-index: 1001;">
                         <span style="margin-right: 12px; font-size: 18px;">📦</span> Add Product
                     </a>
                 </li>
                 <li style="margin-bottom: 8px;">
-                    <a href="adminContact.html" class="nav-link" onclick="showDashboardPage('contact-form')" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px;">
-                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Form
+                    <a href="adminContact.html" class="nav-link" style="display: flex; align-items: center; padding: 12px; color: white; text-decoration: none; border-radius: 8px; transition: background-color 0.2s; font-size: 16px; position: relative; z-index: 1001;">
+                        <span style="margin-right: 12px; font-size: 18px;">📧</span> Contact Messages
                     </a>
                 </li>
             </ul>
             <div class="sidebar-footer" style="padding: 16px; border-top: 1px solid #374151;">
-                <button class="logout-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 12px; background-color: #dc2626; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; font-size: 16px;" onclick="logout()">
+                <button class="logout-btn" style="width: 100%; display: flex; align-items: center; justify-content: center; padding: 12px; background-color: #dc2626; color: white; border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.2s; font-size: 16px; position: relative; z-index: 1001;" onclick="logout()">
                     <span style="margin-right: 12px; font-size: 18px;">🚪</span> Logout
                 </button>
             </div>
         </nav>
-    <div class="add-blog-container" style="flex:1; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin-left: 256px; transition: margin-left 0.3s;">
-            <form class="add-blog-form" style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px;" onsubmit="handleAddBlog(event)">
-                <h2 style="text-align: center; margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Add Blog</h2>
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label for="blog-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
-                    <input type="text" id="blog-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
-                </div>
-                <div class="form-group" style="margin-bottom: 16px;">
-                    <label for="blog-content" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Content</label>
-                    <textarea id="blog-content" name="content" rows="5" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px; resize: vertical;"></textarea>
-                </div>
-                <div class="form-group" style="margin-bottom: 24px;">
-                    <label for="blog-author" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Author</label>
-                    <input type="text" id="blog-author" name="author" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; background-color: #2563eb; color: white; cursor: pointer;">Add Blog</button>
-            </form>
+        <div class="main-content mobile-padding" style="flex: 1; padding: 40px; margin-left: 256px; min-height: 100vh;">
+            <!-- Add Blog Form Section -->
+            <div>
+                <h1 style="font-size: 32px; font-weight: bold; color: #1f2937; margin-bottom: 24px; text-align: center;">Add New Blog</h1>
+                <form class="add-blog-form" onsubmit="handleAddBlog(event)" style="max-width: 600px; margin: 0 auto;">
+                    <div id="blog-message" class="message" style="display: none; margin-bottom: 16px; padding: 12px; border-radius: 4px;"></div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="blog-title" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Title</label>
+                        <input type="text" id="blog-title" name="title" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label for="blog-content" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Content</label>
+                        <textarea id="blog-content" name="content" rows="6" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px; resize: vertical;"></textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 24px;">
+                        <label for="blog-author" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Author</label>
+                        <input type="text" id="blog-author" name="author" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 16px;">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; background-color: #2563eb; color: white; cursor: pointer;">Add Blog</button>
+                </form>
+            </div>
+            
+            <!-- Blogs Grid Section -->
+            <div >
+                <h2 style="font-size: 24px; font-weight: bold; color: #1f2937; margin-bottom: 24px; margin-top: 30px;">All Blogs</h2>
+                <div id="blogs-grid" class="blogs-grid"></div>
+            </div>
         </div>
     </div>
 
-    <!-- Your Blogs Section -->
-    <div style="max-width: 1200px; margin: 40px auto 0 auto; padding: 0 24px; margin-left: 256px; transition: margin-left 0.3s;" id="blogs-section">
-        <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; color: #1f2937;">Your Blogs</h2>
-        <div id="blogs-grid" style="display: flex; flex-wrap: wrap; gap: 24px;"></div>
-    </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.12.0/toastify.min.js"></script>
-    <script src="script.js"></script>
     <script>
     async function handleAddBlog(event) {
         event.preventDefault();
         const title = document.getElementById('blog-title').value;
         const content = document.getElementById('blog-content').value;
         const author = document.getElementById('blog-author').value;
+        
+        // Show loading state
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Adding...';
+        submitBtn.disabled = true;
+        
         try {
             const response = await fetch('http://localhost:5000/blog', {
                 method: 'POST',
@@ -158,38 +170,66 @@
                 },
                 body: JSON.stringify({ title, content, author })
             });
+            
             const data = await response.json();
+            
             if (response.ok) {
-                Toastify({
-                    text: data.message || 'Blog added successfully!',
-                    duration: 3000,
-                    gravity: "top",
-                    position: "center",
-                    backgroundColor: "#10b981",
-                    close: true
-                }).showToast();
-                event.target.reset();
-                loadBlogs(); // Refresh blogs after adding
+                // Success
+                showMessage('blog-message', data.message || 'Blog added successfully!', 'success');
+                showToast('Blog added successfully!', 'success');
+                
+                // Clear form
+                document.getElementById('blog-title').value = '';
+                document.getElementById('blog-content').value = '';
+                document.getElementById('blog-author').value = '';
+                
+                // Reload blogs
+                loadBlogs();
+                
             } else {
-                Toastify({
-                    text: data.error || 'Failed to add blog.',
-                    duration: 3000,
-                    gravity: "top",
-                    position: "center",
-                    backgroundColor: "#ef4444",
-                    close: true
-                }).showToast();
+                // Error
+                showMessage('blog-message', data.error || 'Failed to add blog', 'error');
+                showToast(data.error || 'Failed to add blog', 'error');
             }
-        } catch (err) {
-            Toastify({
-                text: 'Network error. Please try again.',
-                duration: 3000,
-                gravity: "top",
-                position: "center",
-                backgroundColor: "#ef4444",
-                close: true
-            }).showToast();
+            
+        } catch (error) {
+            console.error('Add blog error:', error);
+            showMessage('blog-message', 'Network error. Please try again.', 'error');
+            showToast('Network error. Please try again.', 'error');
+        } finally {
+            // Reset button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
+    }
+
+    // Utility functions
+    function showMessage(elementId, message, type) {
+        const messageDiv = document.getElementById(elementId);
+        messageDiv.textContent = message;
+        messageDiv.className = `message ${type}`;
+        messageDiv.style.display = 'block';
+        
+        if (type === 'success') {
+            messageDiv.style.backgroundColor = '#d1fae5';
+            messageDiv.style.color = '#065f46';
+            messageDiv.style.border = '1px solid #a7f3d0';
+        } else {
+            messageDiv.style.backgroundColor = '#fee2e2';
+            messageDiv.style.color = '#991b1b';
+            messageDiv.style.border = '1px solid #fca5a5';
+        }
+    }
+
+    function showToast(message, type) {
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "center",
+            backgroundColor: type === 'success' ? "#10b981" : "#ef4444",
+        }).showToast();
     }
 
     // Fetch and display all blogs in a grid
@@ -208,15 +248,15 @@
             blogs.forEach((blog, i) => {
                 const shortContent = blog.content.length > 120 ? blog.content.substring(0, 120) + '...' : blog.content;
                 const card = document.createElement('div');
-                card.style = 'background:#fff;flex:1 1 calc(33.333% - 24px);max-width:calc(33.333% - 24px);min-width:280px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;';
+                card.className = 'blog-card';
                 console.log('Blog ID:', blog._id, 'Type:', typeof blog._id); // Debug log
                 card.innerHTML = `
-                    <h3 style="font-size:1.2rem;font-weight:600;color:#1f2937;margin-bottom:8px;">${blog.title}</h3>
-                    <div style="color:#374151;font-size:0.98rem;">${shortContent}</div>
-                    <div style="margin-top:auto;font-size:0.95rem;color:#555;">By: <b>${blog.author || 'Anonymous'}</b></div>
-                    <div style="display:flex;gap:10px;margin-top:18px;">
-                        <button onclick="editBlog('${blog._id}', '${encodeURIComponent(blog.title)}', '${encodeURIComponent(blog.content)}', '${encodeURIComponent(blog.author)}')" style="flex:1;padding:8px 0;background:#2563eb;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Edit</button>
-                        <button onclick="deleteBlog('${blog._id}')" style="flex:1;padding:8px 0;background:#dc2626;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Delete</button>
+                    <h3>${blog.title}</h3>
+                    <p>${shortContent}</p>
+                    <div class="meta">By: <strong>${blog.author || 'Anonymous'}</strong></div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editBlog('${blog._id}', '${encodeURIComponent(blog.title)}', '${encodeURIComponent(blog.content)}', '${encodeURIComponent(blog.author)}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteBlog('${blog._id}')">Delete</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -393,34 +433,6 @@
             }
         };
     }
-    // Sidebar toggle for mobile
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('open');
-        // Shift main content when sidebar is open
-        const addBlogContainer = document.querySelector('.add-blog-container');
-        const blogsSection = document.getElementById('blogs-section');
-        if (sidebar.classList.contains('open')) {
-            addBlogContainer.style.marginLeft = '220px';
-            blogsSection.style.marginLeft = '220px';
-        } else {
-            addBlogContainer.style.marginLeft = '0';
-            blogsSection.style.marginLeft = '0';
-        }
-    }
-    document.getElementById('sidebarToggle').onclick = toggleSidebar;
-
-    // Close sidebar on click outside (mobile)
-    document.addEventListener('click', function(e) {
-        const sidebar = document.getElementById('sidebar');
-        if (window.innerWidth <= 600 && sidebar.classList.contains('open')) {
-            if (!sidebar.contains(e.target) && e.target.id !== 'sidebarToggle') {
-                sidebar.classList.remove('open');
-                document.querySelector('.add-blog-container').style.marginLeft = '0';
-                document.getElementById('blogs-section').style.marginLeft = '0';
-            }
-        }
-    });
 
     // Check if user is logged in
     function checkAuth() {
@@ -430,10 +442,61 @@
         }
     }
 
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = 'index.html';
+    }
+
+    // Mobile sidebar functions
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('active');
+    }
+
+    function closeSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+    }
+
     // Load blogs on page load
     document.addEventListener('DOMContentLoaded', function() {
         checkAuth();
         loadBlogs();
+
+        // Debug function to test sidebar clicks
+        console.log('Page loaded, sidebar should be clickable');
+        
+        // Test if sidebar elements are properly accessible
+        const sidebarLinks = document.querySelectorAll('.sidebar .nav-link');
+        console.log('Found sidebar links:', sidebarLinks.length);
+        
+        sidebarLinks.forEach((link, index) => {
+            console.log(`Link ${index + 1}:`, link.href);
+        });
+
+        // Close sidebar when clicking on navigation links (mobile)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                console.log('Nav link clicked:', this.href);
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
+        });
+
+        // Close sidebar on window resize if desktop
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                closeSidebar();
+            }
+        });
     });
     </script>
 </body>
