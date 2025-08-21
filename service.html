@@ -106,7 +106,7 @@
                     experience is your advantage – we know how to build what lasts.
                 </p>
                 <div class="img-container">
-                    <img src="/image/Sofa.png" class="sofa-image" style="width: 100%; max-width: 600px; margin: 0 auto; display: block;">
+                    <img id="main-product-image" src="/image/Sofa.png" class="sofa-image" style="width: 100%; max-width: 600px; margin: 0 auto; display: block;">
                     <!-- Product Cards Below Sofa Image -->
                     <div class="container" style="margin-top: 40px; padding: 0 20px;">
                         <div class="row row-cols-1 row-cols-md-3 g-4" id="service-products-grid"></div>
@@ -172,12 +172,30 @@
 // Show up to 6 products, 3 per row, below the sofa image, with limited content and clickable cards
 async function loadServiceGridProducts() {
     const grid = document.getElementById('service-products-grid');
+    const mainImg = document.getElementById('main-product-image');
     if (!grid) return;
     grid.innerHTML = '';
     try {
         const response = await fetch('http://localhost:5000/product');
         const products = await response.json();
         console.log('Products loaded:', products);
+        // Show latest product image above cards, fallback to sofa image
+        if (Array.isArray(products) && products.length > 0) {
+            // Try to get the most recently created product (assuming products are not sorted)
+            let latest = products[0];
+            if (products[0].createdAt) {
+                // Sort by createdAt descending if available
+                products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                latest = products[0];
+            }
+            let mainImageUrl = latest.image;
+            if (mainImageUrl && mainImageUrl.startsWith('/uploads/')) {
+                mainImageUrl = `http://localhost:5000/${mainImageUrl}`;
+            }
+            mainImg.src = mainImageUrl;
+        } else {
+            // mainImg.src = '/image/Sofa.png';
+        }
         const limited = products.slice(0, 6);
         if (limited.length === 0) {
             grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">No products found.</div>';
@@ -188,13 +206,11 @@ async function loadServiceGridProducts() {
             col.className = 'col';
             // Limit content to 120 chars
             const shortContent = product.content.length > 120 ? product.content.substring(0, 120) + '...' : product.content;
-            
             // Handle both Cloudinary URLs and local paths
             let imageUrl = product.image;
             if (product.image && product.image.startsWith('/uploads/')) {
-                imageUrl = `https://sumedh-boudh-backend.vercel.app${product.image}`;
+                imageUrl = `http://localhost:5000/${product.image}`;
             }
-            
             col.innerHTML = `
                 <div class="card h-100" style="border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);overflow:hidden;cursor:pointer;background:#fff;" onclick="window.location.href='product-detail.html?id=${product._id}'">
                     <img src="${imageUrl}" class="card-img-top" alt="Product Image" style="height:180px;object-fit:cover;">
@@ -207,6 +223,7 @@ async function loadServiceGridProducts() {
             grid.appendChild(col);
         });
     } catch (err) {
+        mainImg.src = '/image/Sofa.png';
         grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#e53e3e;">Error loading products.</div>';
     }
 }
