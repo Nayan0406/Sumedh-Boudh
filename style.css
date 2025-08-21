@@ -356,11 +356,70 @@ header.scrolled {
     font-family: Abhaya Libre, serif;
 }
 
+
 .inspirational-image {
-    width: 229px;
-    height: 342px;
+    width: 220px;
+    height: 320px;
     overflow: hidden;
     display: inline-block;
+    border-radius: 16px;
+    margin-right: 12px;
+    margin-bottom: 0;
+}
+
+.inspirational-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+}
+
+.inspirational-image:last-child {
+    margin-right: 0;
+}
+
+@media (max-width: 700px) {
+    .inspirational-image-container {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 18px !important;
+    }
+    .inspirational-image {
+        width: 98vw;
+        max-width: 480px;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 18px;
+        display: block;
+    }
+    .inspirational-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .inspirational-image:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 376px) {
+    .inspirational-image {
+        width: 376px;
+        max-width: 100vw;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 18px;
+        display: block;
+    }
+    .inspirational-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .inspirational-image:last-child {
+        margin-bottom: 0;
+    }
 }
 
 
@@ -379,9 +438,9 @@ header.scrolled {
     display: block;
 }
 
-.inspirational-image:hover img {
+/* .inspirational-image:hover img {
     transform: scale(1.1);
-}
+} */
 
 .inspirational-heading {
     font-family: Abhaya Libre ExtraBold, serif;
@@ -390,13 +449,13 @@ header.scrolled {
     color: #ffffff;
     margin-bottom: 30px;
     width: 500px;
-    height: 110px;
+    height: 90px;
 }
 
 .inspirational-text p {
     font-size: 12.71px;
     color: #ffffff;
-    line-height: 24px;
+    line-height: 10px;
     margin-bottom: 20px;
     font-weight: 400;
     font-family: Adamina, serif;
@@ -1211,6 +1270,31 @@ a:link {
         width: 100%;
         max-width: 1300px;
         padding: 0 40px;
+    }
+}
+
+@media (max-width: 700px) {
+    .services-row {
+        overflow-x: auto !important;
+        flex-wrap: nowrap !important;
+        -webkit-overflow-scrolling: touch;
+        gap: 12px !important;
+        scrollbar-width: none;
+    }
+    .services-row::-webkit-scrollbar {
+        display: none;
+    }
+    .service-card {
+        min-width: 390px !important;
+        width: 80vw !important;
+        max-width: 340px;
+        margin-right: 12px;
+    }
+    .services-container {
+        padding: 0 8px;
+    }
+    .scroll-btn {
+        display: none !important;
     }
 }
 
@@ -2624,7 +2708,7 @@ a:link {
 
     .inspirational-text p {
         font-size: 11px;
-        line-height: 20px;
+        line-height: 5x;
     }
 
     .cursive-texts {

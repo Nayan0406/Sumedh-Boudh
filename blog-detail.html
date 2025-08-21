@@ -67,11 +67,52 @@
             color: #dc3545;
             font-size: 1.2rem;
         }
+
+        @media (max-width: 900px) {
+            .blog-detail-container {
+                max-width: 98vw;
+                margin: 40px 1vw;
+                padding: 14px;
+            }
+            .blog-title {
+                font-size: 2rem;
+            }
+        }
+        @media (max-width: 600px) {
+            .blog-detail-container {
+                max-width: 100vw;
+                margin: 20px 0 0 0;
+                padding: 7px 2vw;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            .blog-title {
+                font-size: 1.3rem;
+                padding-bottom: 6px;
+            }
+            .blog-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+                font-size: 0.95rem;
+                margin-bottom: 18px;
+            }
+            .blog-content {
+                font-size: 1rem;
+                line-height: 1.6;
+                padding: 0;
+            }
+            .back-button {
+                padding: 8px 12px;
+                font-size: 0.98rem;
+                margin-bottom: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <header>
+    <!-- <header>
         <nav class="custom-nav">
             <div class="nav-left">
                 <div class="logo">
@@ -105,12 +146,12 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header> -->
 
     <main>
         <div class="blog-detail-container">
-            <a href="index.html" class="back-button">
-                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            <a href="blog.html" class="back-button">
+                <i class="fa-solid fa-arrow-left"></i> Back to Blog
             </a>
             
             <div id="blog-content">
@@ -122,15 +163,15 @@
         </div>
     </main>
 
-    <footer class="main-footer">
+    <!-- <footer class="main-footer">
         <div class="footer-container">
-            <!-- Left Column - Logo and Name -->
+            
             <div class="footer-branding">
                 <div class="footer-logo"><a href="/index.html"><img src="image/Group_865.png" alt="Tars logo"></a>
                 </div>
             </div>
 
-            <!-- Middle Column - Navigation -->
+            
             <nav class="footer-navigation" style="flex-wrap: wrap; justify-content: center; align-items: center;">
                 <h3 class="nav-title">NAVIGATION</h3>
                 <ul class="nav-links">
@@ -143,7 +184,7 @@
                 </ul>
             </nav>
 
-            <!-- Right Column - Social Links -->
+            
             <div class="footer-social">
                 <h2 class="footer-name">SUMEDH BOUDH</h2>
                 <div class="social-icons">
@@ -155,7 +196,7 @@
         <div class="end">
             <p>branding & website designing by tars technology</p>
         </div>
-    </footer>
+    </footer> -->
 
     <script>
         // Get blog ID from URL parameters

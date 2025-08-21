@@ -6,7 +6,7 @@
     <title>Product Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <style>
         /* Responsive styles for product detail page */
@@ -29,6 +29,28 @@
             object-fit: cover;
             width: 100%;
         }
+
+        /* Responsive back button and container */
+        .back-btn-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+        .back-btn-row .btn {
+            background: #ff5c1a;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-right: 16px;
+            transition: background 0.2s;
+        }
+        .back-btn-row .btn:hover, .back-btn-row .btn:focus {
+            background: #e04e0f;
+            color: #fff;
+        }
         
         @media (max-width: 768px) {
             .product-detail-container {
@@ -47,6 +69,22 @@
                 max-height: 250px;
                 margin-bottom: 20px;
             }
+
+            .back-btn-row {
+                margin-bottom: 16px;
+                padding-left: 0;
+            }
+            .back-btn-row .btn {
+                padding: 8px 14px;
+                font-size: 0.98rem;
+                margin-right: 8px;
+            }
+            .container-fluid {
+                padding: 10px !important;
+            }
+            #product-detail {
+                padding: 10px !important;
+            }
         }
         
         @media (max-width: 480px) {
@@ -61,11 +99,30 @@
             .product-image {
                 max-height: 200px;
             }
+
+            .back-btn-row {
+                margin-bottom: 10px;
+                padding-left: 0;
+            }
+            .back-btn-row .btn {
+                padding: 7px 10px;
+                font-size: 0.92rem;
+                margin-right: 4px;
+            }
+            .container-fluid {
+                padding: 4px !important;
+            }
+            #product-detail {
+                padding: 4px !important;
+            }
+            .row.g-4 {
+                flex-direction: column !important;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="social-sidebar">
+    <!-- <div class="social-sidebar">
         <a href="#" class="social-icon behance" title="Behance">
             <i class="fab fa-behance"></i>
         </a>
@@ -78,9 +135,9 @@
         <a href="#" class="social-icon linkedin" title="LinkedIn">
             <i class="fab fa-linkedin-in"></i>
         </a>
-    </div>
+    </div> -->
 
-    <header>
+    <!-- <header>
         <nav class="custom-nav">
             <div class="nav-left">
                 <div class="logo">
@@ -114,20 +171,20 @@
                 </div>
             </div>
         </nav>
-    </header>
+    </header> -->
 
     <main style="padding-top: 120px; background: #000; min-height: 100vh;">
         <div class="container-fluid" style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+            <div class="back-btn-row">
+                <a href="product.html" class="btn">← Back to Products</a>
+            </div>
             <div id="product-detail" style="background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.15); padding: 20px;">
                 <div style="text-align: center; padding: 40px; color: #666;">Loading product details...</div>
-            </div>
-            <div class="text-center" style="margin-top: 40px;">
-                <a href="service.html" class="btn" style="background: #ff5c1a; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">← Back to Services</a>
             </div>
         </div>
     </main>
 
-    <footer class="main-footer">
+    <!-- <footer class="main-footer">
         <div class="footer-container">
             <div class="footer-branding">
                 <div class="footer-logo"><a href="/index.html"><img src="/image/Group_865.png" alt="Tars logo"></a></div>
@@ -154,7 +211,7 @@
         <div class="end">
             <p>branding & website designing by tars technology</p>
         </div>
-    </footer>
+    </footer> -->
 
     <script src="script.js"></script>
     <script>
