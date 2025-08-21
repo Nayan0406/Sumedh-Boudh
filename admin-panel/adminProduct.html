@@ -94,7 +94,7 @@
         formData.append('image', imageFile);
         try {
             console.log('Sending request to server...'); // Debug log
-            const response = await fetch('https://sumedh-boudh-backend.vercel.app/product', {
+            const response = await fetch('http://localhost:5000/product', {
                 method: 'POST',
                 body: formData
             });
@@ -188,7 +188,7 @@
         formData.append('content', content);
         if (imageFile) formData.append('image', imageFile);
         try {
-            const response = await fetch(`https://sumedh-boudh-backend.vercel.app/product/${editingProductId}`, {
+            const response = await fetch(`http://localhost:5000/product/${editingProductId}`, {
                 method: 'PUT',
                 body: formData
             });
@@ -209,7 +209,7 @@
     async function deleteProduct(id) {
         if (!confirm('Are you sure you want to delete this product?')) return;
         try {
-            const response = await fetch(`https://sumedh-boudh-backend.vercel.app/product/${id}`, { method: 'DELETE' });
+            const response = await fetch(`http://localhost:5000/product/${id}`, { method: 'DELETE' });
             const data = await response.json();
             if (response.ok) {
                 Toastify({ text: data.message || 'Product deleted!', duration: 3000, gravity: "top", position: "center", backgroundColor: "#10b981", close: true }).showToast();
@@ -228,7 +228,7 @@
         if (!grid) return;
         grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">Loading products...</div>';
         try {
-            const response = await fetch('https://sumedh-boudh-backend.vercel.app/product');
+            const response = await fetch('http://localhost:5000/product');
             const products = await response.json();
             if (!Array.isArray(products) || products.length === 0) {
                 grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">No products found.</div>';
@@ -241,13 +241,19 @@
                 if (product.image && product.image.startsWith('/uploads/')) {
                     imageUrl = `https://sumedh-boudh-backend.vercel.app${product.image}`;
                 }
-                
+
+                // Limit content to 100 characters with ellipsis
+                let limitedContent = product.content;
+                if (limitedContent && limitedContent.length > 100) {
+                    limitedContent = limitedContent.substring(0, 100) + '...';
+                }
+
                 const card = document.createElement('div');
                 card.style = 'background:#fff;flex:1 1 calc(33.333% - 24px);max-width:calc(33.333% - 24px);min-width:280px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;';
                 card.innerHTML = `
                     <img src="${imageUrl}" alt="Product Image" style="width:100%;height:180px;object-fit:cover;border-radius:8px 8px 0 0;">
                     <h3 style="font-size:1.2rem;font-weight:600;color:#1f2937;margin-bottom:8px;">${product.title}</h3>
-                    <div style="color:#374151;font-size:0.98rem;">${product.content}</div>
+                    <div style="color:#374151;font-size:0.98rem;">${limitedContent}</div>
                     <div style="display:flex;gap:10px;margin-top:18px;">
                         <button onclick="editProduct('${product._id}', '${encodeURIComponent(product.title)}', '${encodeURIComponent(product.content)}')" style="flex:1;padding:8px 0;background:#2563eb;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Edit</button>
                         <button onclick="deleteProduct('${product._id}')" style="flex:1;padding:8px 0;background:#dc2626;color:#fff;border:none;border-radius:5px;cursor:pointer;font-size:0.98rem;font-weight:600;">Delete</button>

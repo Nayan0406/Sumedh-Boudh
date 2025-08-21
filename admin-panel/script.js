@@ -41,7 +41,7 @@ async function handleLogin(event) {
     loginBtn.disabled = true;
     messageDiv.style.display = 'none';
     try {
-        const response = await fetch('https://sumedh-boudh-backend.vercel.app/login', {
+        const response = await fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ async function handleRegister(event) {
     messageDiv.style.display = 'none';
     
     try {
-        const response = await fetch('https://sumedh-boudh-backend.vercel.app/register', {
+        const response = await fetch('http://localhost:5000/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -152,7 +152,7 @@ async function handleAddBlog(event) {
     messageDiv.style.display = 'none';
     
     try {
-        const response = await fetch('https://sumedh-boudh-backend.vercel.app/blog', {
+        const response = await fetch('http://localhost:5000/blog', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
