@@ -31,8 +31,7 @@ app.use('/register', registerRoute);
 
 app.use('/login', loginRoute);
 
-// Serve uploaded images statically
-app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+// Static uploads route no longer needed - using Cloudinary
 app.use('/product', productRoute);
 app.use('/contact', contactRoute);
 

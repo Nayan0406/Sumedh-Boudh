@@ -175,10 +175,16 @@
             }
             const product = await response.json();
             
+            // Handle both Cloudinary URLs and local paths
+            let imageUrl = product.image;
+            if (product.image && product.image.startsWith('/uploads/')) {
+                imageUrl = `http://localhost:5000${product.image}`;
+            }
+            
             container.innerHTML = `
                 <div class="row g-4">
                     <div class="col-12 col-lg-5">
-                        <img src="http://localhost:5000${product.image}" alt="Product Image" class="img-fluid product-image" style="border-radius: 12px;">
+                        <img src="${imageUrl}" alt="Product Image" class="img-fluid product-image" style="border-radius: 12px;">
                     </div>
                     <div class="col-12 col-lg-7">
                         <div class="product-detail-container">

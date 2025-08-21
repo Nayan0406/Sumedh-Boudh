@@ -1,20 +1,22 @@
 import express from 'express';
 import Product from '../models/Product.js';
 import multer from 'multer';
-import path from 'path';
+import { v2 as cloudinary } from 'cloudinary';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
-// Set storage engine for local file upload
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(process.cwd(), '..', 'uploads'));
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
+
+// Configure multer for memory storage (temporary)
+const storage = multer.memoryStorage();
 
 // File filter for images only
 function fileFilter (req, file, cb) {
@@ -27,7 +29,7 @@ function fileFilter (req, file, cb) {
 
 const upload = multer({ storage, fileFilter });
 
-// Add Product with local image upload
+// Add Product with Cloudinary image upload
 router.post('/', upload.single('image'), async (req, res) => {
 	try {
 		console.log('Product route hit');
@@ -35,16 +37,31 @@ router.post('/', upload.single('image'), async (req, res) => {
 		console.log('Request file:', req.file);
 		
 		const { title, content } = req.body;
-		const image = req.file ? `/uploads/${req.file.filename}` : null;
 		
-		console.log('Parsed data:', { title, content, image });
-		
-		if (!title || !content || !image) {
+		if (!title || !content || !req.file) {
 			console.log('Missing fields');
 			return res.status(400).json({ error: 'All fields are required.' });
 		}
 
-		const newProduct = new Product({ title, content, image });
+		// Upload image to Cloudinary
+		const uploadResponse = await new Promise((resolve, reject) => {
+			cloudinary.uploader.upload_stream(
+				{
+					folder: 'products', // Optional: organize images in folders
+					resource_type: 'image'
+				},
+				(error, result) => {
+					if (error) reject(error);
+					else resolve(result);
+				}
+			).end(req.file.buffer);
+		});
+
+		console.log('Cloudinary upload response:', uploadResponse);
+		
+		const imageUrl = uploadResponse.secure_url;
+		
+		const newProduct = new Product({ title, content, image: imageUrl });
 		console.log('Creating product:', newProduct);
 		
 		await newProduct.save();
@@ -85,9 +102,25 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 	try {
 		const { title, content } = req.body;
 		let updateData = { title, content };
+		
 		if (req.file) {
-			updateData.image = `/uploads/${req.file.filename}`;
+			// Upload new image to Cloudinary
+			const uploadResponse = await new Promise((resolve, reject) => {
+				cloudinary.uploader.upload_stream(
+					{
+						folder: 'products',
+						resource_type: 'image'
+					},
+					(error, result) => {
+						if (error) reject(error);
+						else resolve(result);
+					}
+				).end(req.file.buffer);
+			});
+			
+			updateData.image = uploadResponse.secure_url;
 		}
+		
 		const updatedProduct = await Product.findByIdAndUpdate(
 			req.params.id,
 			updateData,

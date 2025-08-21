@@ -177,6 +177,7 @@ async function loadServiceGridProducts() {
     try {
         const response = await fetch('http://localhost:5000/product');
         const products = await response.json();
+        console.log('Products loaded:', products);
         const limited = products.slice(0, 6);
         if (limited.length === 0) {
             grid.innerHTML = '<div style="width:100%;text-align:center;padding:32px 0;color:#888;">No products found.</div>';
@@ -187,9 +188,16 @@ async function loadServiceGridProducts() {
             col.className = 'col';
             // Limit content to 120 chars
             const shortContent = product.content.length > 120 ? product.content.substring(0, 120) + '...' : product.content;
+            
+            // Handle both Cloudinary URLs and local paths
+            let imageUrl = product.image;
+            if (product.image && product.image.startsWith('/uploads/')) {
+                imageUrl = `http://localhost:5000${product.image}`;
+            }
+            
             col.innerHTML = `
                 <div class="card h-100" style="border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);overflow:hidden;cursor:pointer;background:#fff;" onclick="window.location.href='product-detail.html?id=${product._id}'">
-                    <img src="http://localhost:5000${product.image}" class="card-img-top" alt="Product Image" style="height:180px;object-fit:cover;">
+                    <img src="${imageUrl}" class="card-img-top" alt="Product Image" style="height:180px;object-fit:cover;">
                     <div class="card-body d-flex flex-column" style="background:#fff;padding:20px 18px 18px 18px;">
                         <h5 class="card-title" style="font-size:1.1rem;font-weight:700;color:#181818;margin-bottom:10px;">${product.title}</h5>
                         <p class="card-text" style="color:#333;font-size:1rem;line-height:1.5;">${shortContent}</p>
