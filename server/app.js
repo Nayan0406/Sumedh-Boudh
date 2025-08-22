@@ -23,7 +23,11 @@ app.use(express.json());
 const port = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: ["http://127.0.0.1:5500/", "https://sumedh-boudh-backend.vercel.app/"],
+  origin: [
+    "http://127.0.0.1:5500",
+    "http://localhost:5000", 
+    // "https://your-vercel-domain.vercel.app"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 }));
