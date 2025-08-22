@@ -13,6 +13,12 @@ import contactRoute from './routes/contactRoute.js';
 
 dotenv.config();
 
+// const corsOptions = {
+//   origin: ["http://127.0.0.1:5500/"],
+//   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//   credentials: true,
+// };
+
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
