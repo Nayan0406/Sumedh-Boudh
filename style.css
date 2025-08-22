@@ -3304,7 +3304,7 @@ a:link {
     .about-image {
         width: 75vw;
         min-width: 75vw;
-        background-position: center;
+        background-position: left;
         background-size: cover;
         position: relative;
         bottom: -50px;
