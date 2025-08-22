@@ -362,7 +362,7 @@ header.scrolled {
     height: 320px;
     overflow: hidden;
     display: inline-block;
-    border-radius: 16px;
+    /* border-radius: 16px; */
     margin-right: 12px;
     margin-bottom: 0;
 }
@@ -1026,7 +1026,7 @@ header.scrolled {
 
 .hello-container {
     position: absolute;
-    top: 65%;
+    top: 50%;
     left: 45%;
     transform: translate(-50%, -50%);
     text-align: left;
@@ -3312,7 +3312,7 @@ a:link {
 
     .hello-container {
         position: relative;
-        top: -190px;
+        top: -350px;
         left: -45px;
         transform: none;
         width: 65vw;
