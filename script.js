@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const cardsGrid = document.querySelector('.cards-grid .row');
     if (cardsGrid) {
-        fetch('http://localhost:5000/product')
+        fetch('https://sumedh-boudh-backend.vercel.app/product')
             .then(res => res.json())
             .then(products => {
                 cardsGrid.innerHTML = '';
