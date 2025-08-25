@@ -10,10 +10,7 @@
 </head>
 <body>
     <div id="login-app" class="app">
-        <!-- Mobile menu button -->
-        <button class="mobile-menu-btn" id="mobile-menu-btn" onclick="toggleSidebar()" style="display:none;">
-            ☰
-        </button>
+
         
         <!-- Sidebar overlay for mobile -->
         <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
@@ -124,13 +121,13 @@
             if (isLoggedIn) {
                 // Show sidebar, hide auth pages
                 sidebar.style.display = 'flex';
-                mobileMenuBtn.style.display = 'block';
+                // mobileMenuBtn.style.display = 'block'; // Removed: never show toggle button
                 loginPage.style.display = 'none';
                 registerPage.style.display = 'none';
             } else {
                 // Hide sidebar, show correct auth page
                 sidebar.style.display = 'none';
-                mobileMenuBtn.style.display = 'none';
+                // mobileMenuBtn.style.display = 'none'; // Removed: never show toggle button
                 if (window.location.pathname.endsWith('/register')) {
                     loginPage.classList.remove('active');
                     registerPage.classList.add('active');
