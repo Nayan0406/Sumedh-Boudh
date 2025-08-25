@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
     // Change this to your Vercel deployment URL when deployed
-    PRODUCTION_URL: 'http://localhost:5000/',
+    PRODUCTION_URL: 'https://sumedh-boudh-backend.vercel.app/',
     LOCAL_URL: 'http://localhost:5000',
     
     // Automatically detect environment
