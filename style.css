@@ -464,28 +464,38 @@ header.scrolled {
 }
 
 @media (max-width: 700px) {
-    .inspirational-image-container {
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 18px !important;
-    }
-    .inspirational-image {
-        width: 98vw;
-        max-width: 480px;
-        height: 200px;
-        margin-right: 0;
-        margin-bottom: 18px;
-        display: block;
-    }
-    .inspirational-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    .inspirational-image:last-child {
-        margin-bottom: 0;
-    }
+  .inspirational-image-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 18px;
+    overflow-x: auto;              /* Horizontal scroll enable */
+    overflow-y: hidden;            /* Vertical scroll off */
+    scroll-snap-type: x mandatory; /* Snap effect */
+    -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
+    padding: 10px;
+  }
+
+  .inspirational-image {
+    flex: 0 0 auto;     /* Prevent shrinking */
+    width: 80vw;        /* Each image takes 80% of viewport */
+    max-width: 320px;
+    height: 220px;
+    scroll-snap-align: center;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;   /* Fallback background */
+  }
+
+  .inspirational-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
 }
+
+
 
 @media (max-width: 376px) {
     .inspirational-image {
