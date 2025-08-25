@@ -144,7 +144,7 @@ offers are built from embodiment, and success begins in your nervous system. 
         // Fetch and display blogs
         async function loadBlogs() {
             try {
-                const response = await fetch('htpp://localhost:5000/blog');
+                const response = await fetch('http://localhost:5000/blog');
                 const blogs = await response.json();
                 
                 const container = document.getElementById('blog-container');

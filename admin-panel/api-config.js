@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
     // Change this to your Vercel deployment URL when deployed
-    PRODUCTION_URL: 'htpp://localhost:5000/',
+    PRODUCTION_URL: 'http://localhost:5000/',
     LOCAL_URL: 'http://localhost:5000',
     
     // Automatically detect environment

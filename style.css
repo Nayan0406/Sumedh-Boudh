@@ -482,7 +482,7 @@ header.scrolled {
     max-width: 320px;
     height: 220px;
     scroll-snap-align: center;
-    scroll-snap-type: x mandatory;
+    /* scroll-snap-type: x mandatory; */
     border-radius: 12px;
     overflow: hidden;
     background: #000;   /* Fallback background */
