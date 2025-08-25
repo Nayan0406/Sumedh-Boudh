@@ -22,6 +22,7 @@
         .product-content {
             font-size: clamp(1rem, 2vw, 1.125rem) !important;
             line-height: 1.6;
+            text-align: justify;
         }
         
         .product-image {
@@ -51,6 +52,39 @@
             background: #e04e0f;
             color: #fff;
         }
+
+        .product-detail-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+            max-height: 400px;
+            margin-bottom: 24px;
+        }
+        .product-detail-container {
+            width: 100%;
+            max-width: 1150px;
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .product-detail-container {
+                padding: 15px;
+            }
+            .product-image {
+                max-height: 250px;
+            }
+        }
+        @media (max-width: 480px) {
+            .product-detail-container {
+                padding: 10px;
+            }
+            .product-image {
+                max-height: 200px;
+            }
+        }
         
         @media (max-width: 768px) {
             .product-detail-container {
@@ -63,6 +97,7 @@
             
             .product-content {
                 margin-bottom: 20px !important;
+                text-align: justify !important;
             }
             
             .product-image {
@@ -239,17 +274,13 @@
             }
             
             container.innerHTML = `
-                <div class="row g-4">
-                    <div class="col-12 col-lg-5">
-                        <img src="${imageUrl}" alt="Product Image" class="img-fluid product-image" style="border-radius: 12px;">
-                    </div>
-                    <div class="col-12 col-lg-7">
-                        <div class="product-detail-container">
-                            <h1 class="product-title" style="font-weight: 700; color: #1f2937; margin-bottom: 20px;">${product.title}</h1>
-                            <div class="product-content" style="color: #374151; line-height: 1.7; margin-bottom: 30px;">${product.content}</div>
-                            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px;">
-                                <p style="margin: 0; color: #6b7280; font-size: clamp(0.75rem, 2vw, 0.875rem);">Added on: ${new Date(product.createdAt).toLocaleDateString()}</p>
-                            </div>
+                <div class="product-detail-vertical">
+                    <img src="${imageUrl}" alt="Product Image" class="img-fluid product-image" style="border-radius: 12px; margin-bottom: 24px;">
+                    <div class="product-detail-container">
+                        <h1 class="product-title" style="font-weight: 700; color: #1f2937; margin-bottom: 20px;">${product.title}</h1>
+                        <div class="product-content" style="color: #374151; line-height: 1.7; margin-bottom: 30px;">${product.content}</div>
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px;">
+                            <p style="margin: 0; color: #6b7280; font-size: clamp(0.75rem, 2vw, 0.875rem);">Added on: ${new Date(product.createdAt).toLocaleDateString()}</p>
                         </div>
                     </div>
                 </div>
