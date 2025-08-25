@@ -163,11 +163,17 @@ body {
 /* Main Content Styles */
 .main-content {
     flex: 1;
+    margin-left: 250px;
+    /* transition: margin-left 0.3s ease; */
+}
+
+.main-contents {
+    flex: 1;
     margin-left: 20px;
     /* transition: margin-left 0.3s ease; */
 }
 
-.main-content.sidebar-collapsed {
+.main-contents.sidebar-collapsed {
     margin-left: 0;
 }
 
@@ -510,7 +516,7 @@ body {
     }
     
     .main-content.mobile-padding {
-        padding-top: 0px !important;
+        padding-top: 67px !important;
     }
     
     /* Content Containers */
@@ -623,8 +629,8 @@ body {
         padding: 10px;
     }
     
-    .main-content {
-        padding: 0px 10px 0px 10px !important;
+    .main-contents {
+        padding: 0px 0px 0px 0px !important;
     }
     
     .add-blog-container,
