@@ -469,7 +469,7 @@ header.scrolled {
     flex-direction: row !important;
     align-items: center;
     gap: 18px;
-    overflow-x: auto;              /* Horizontal scroll enable */
+    overflow-x: auto !important;              /* Horizontal scroll enable */
     overflow-y: hidden;            /* Vertical scroll off */
     scroll-snap-type: x mandatory; /* Snap effect */
     -webkit-overflow-scrolling: touch; /* Smooth iOS scrolling */
@@ -482,6 +482,7 @@ header.scrolled {
     max-width: 320px;
     height: 220px;
     scroll-snap-align: center;
+    scroll-snap-type: x mandatory;
     border-radius: 12px;
     overflow: hidden;
     background: #000;   /* Fallback background */
