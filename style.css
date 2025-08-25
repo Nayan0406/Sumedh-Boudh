@@ -504,6 +504,19 @@ header.scrolled {
     .inspirational-image:last-child {
         margin-bottom: 0;
     }
+
+    .about-image {
+        background-image: url("image/about.png") !important;
+        width: 75vw !important;
+        min-width: 75vw !important;
+        background-position: center !important;
+        background-size: cover !important;
+        position: relative !important;
+        bottom: -50px !important;
+        margin-left: 0 !important;
+        display: block !important;
+        margin-right: 50px !important;
+    }
 }
 
 
@@ -3302,6 +3315,7 @@ a:link {
 
 
     .about-image {
+        background-image: url("image/about.png");
         width: 75vw;
         min-width: 75vw;
         background-position: left;

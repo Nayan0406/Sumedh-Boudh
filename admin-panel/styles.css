@@ -163,7 +163,7 @@ body {
 /* Main Content Styles */
 .main-content {
     flex: 1;
-    margin-left: 250px;
+    margin-left: 20px;
     /* transition: margin-left 0.3s ease; */
 }
 
@@ -173,7 +173,7 @@ body {
 
 .page {
     display: none;
-    padding: 40px;
+    padding: 0px;
 }
 
 .page.active {
@@ -510,7 +510,7 @@ body {
     }
     
     .main-content.mobile-padding {
-        padding-top: 70px !important;
+        padding-top: 0px !important;
     }
     
     /* Content Containers */
@@ -524,7 +524,7 @@ body {
     
     /* Page Content */
     .page {
-        padding: 70px 15px 20px 15px;
+        padding: 0px 15px 0px 15px;
     }
     
     /* Sidebar Components */
@@ -624,7 +624,7 @@ body {
     }
     
     .main-content {
-        padding: 60px 10px 15px 10px !important;
+        padding: 0px 10px 0px 10px !important;
     }
     
     .add-blog-container,
