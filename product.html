@@ -25,6 +25,71 @@
                 overflow: hidden;
             }
         }
+        
+        /* Tablet responsive styles (769px to 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                
+                max-width: 90% !important;
+                padding: 0 20px;
+            }
+            
+            .section-title {
+                font-size: 2.2rem !important;
+                margin-bottom: 28px !important;
+                text-align: center;
+            }
+            
+            .row.row-cols-md-3 {
+                --bs-gutter-x: 1rem;
+                --bs-gutter-y: 1rem;
+            }
+            
+            .card {
+                margin-bottom: 16px;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            
+            .card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 6px 20px rgba(0,0,0,0.15) !important;
+            }
+            
+            .card-img-top {
+                height: 160px !important;
+            }
+            
+            .card-body {
+                padding: 16px 14px 14px 14px !important;
+            }
+            
+            .card-title {
+                font-size: 1rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .card-text {
+                font-size: 0.9rem !important;
+                line-height: 1.4 !important;
+            }
+            
+            main {
+                padding-top: 100px !important;
+            }
+            
+            .footer-container {
+                padding: 30px 20px;
+                gap: 25px;
+            }
+            
+            .footer-navigation {
+                margin-top: 15px;
+            }
+            
+            .nav-links {
+                gap: 15px 25px;
+            }
+        }
     </style>
 </head>
 <body style="background:#000;">

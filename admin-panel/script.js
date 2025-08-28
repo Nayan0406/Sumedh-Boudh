@@ -250,6 +250,7 @@ async function handleRegister(event) {
     
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
+    const username = document.getElementById('reg-username').value;
     const registerBtn = document.getElementById('register-btn');
     const messageDiv = document.getElementById('register-message');
     
@@ -264,7 +265,7 @@ async function handleRegister(event) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ email, password, username })
         });
         
         const data = await response.json();
@@ -277,6 +278,7 @@ async function handleRegister(event) {
             // Clear form
             document.getElementById('reg-email').value = '';
             document.getElementById('reg-password').value = '';
+            document.getElementById('reg-username').value = '';
             
             // Redirect to login page after short delay
             setTimeout(() => {

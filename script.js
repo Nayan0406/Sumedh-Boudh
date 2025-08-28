@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.className = 'service-blocks';
                     card.innerHTML = `
                         <div class="card-icon">
-                            <img src="https://sumedh-boudh-backend.vercel.app${product.image}" class="card-img-top" style="max-height:180px;object-fit:cover;">
+                            <img src="http://localhost:5000${product.image}" class="card-img-top" style="max-height:180px;object-fit:cover;">
                             <div class="card-body">
                                 <h3 class="card-title">${product.title}</h3>
                                 <p class="card-text">${product.content}</p>

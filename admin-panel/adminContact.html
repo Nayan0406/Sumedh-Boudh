@@ -56,8 +56,8 @@
         <div class="contact-container main-content mobile-padding" style="flex: 1; padding: 40px 24px; margin-left: 0; width: 100%;">
             <div style="background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 32px;">
                 <h2 style="margin-bottom: 24px; font-size: 24px; font-weight: bold; color: #1f2937;">Contact Messages</h2>
-                <div id="contacts-container" class="contacts-grid" style="margin-top: 20px;">
-                    <div id="loading" style="text-align: center; padding: 40px; color: #6b7280;">
+                <div id="contacts-container" class="contacts-grid" style="margin-top: 20px; display: grid;">
+                    <div id="loading" style="text-align: center; padding: 40px; color: #6b7280; grid-column: 1 / -1;">
                         Loading contacts...
                     </div>
                 </div>
@@ -83,22 +83,22 @@
                 loadingDiv.style.display = 'none';
                 
                 const contactsHTML = contacts.map(contact => `
-                    <div class="contact-card" style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; background: white; ">
+                    <div class="contact-card" style="border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px; background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: transform 0.2s ease, box-shadow 0.2s ease; height: fit-content;">
                         <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px; flex-wrap: wrap;">
-                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #1f2937;">${contact.name}</h3>
-                            <span style="font-size: 0.875rem; color: #6b7280; margin-top: 4px;">${new Date(contact.createdAt).toLocaleDateString()}</span>
+                            <h3 style="margin: 0; font-size: 1.25rem; font-weight: 600; color: #1f2937; line-height: 1.2; flex: 1; margin-right: 10px;">${contact.name}</h3>
+                            <span style="font-size: 0.875rem; color: #6b7280; margin-top: 4px; white-space: nowrap;">${new Date(contact.createdAt).toLocaleDateString()}</span>
                         </div>
                         <div style="margin-bottom: 12px;">
                             <strong style="color: #374151; font-weight: 500;">📞 Phone:</strong> 
-                            <span style="color: #6b7280; margin-left: 8px;">${contact.number}</span>
+                            <span style="color: #6b7280; margin-left: 8px; word-break: break-word;">${contact.number}</span>
                         </div>
                         <div style="margin-bottom: 12px;">
                             <strong style="color: #374151; font-weight: 500;">📧 Email:</strong> 
-                            <span style="color: #6b7280; margin-left: 8px;">${contact.email}</span>
+                            <span style="color: #6b7280; margin-left: 8px; word-break: break-word;">${contact.email}</span>
                         </div>
                         <div style="margin-bottom: 8px;">
                             <strong style="color: #374151; font-weight: 500;">💬 Message:</strong> 
-                            <p style="margin: 8px 0 0 0; color: #6b7280; line-height: 1.6; background: #f9fafb; padding: 12px; border-radius: 6px; border-left: 3px solid #3b82f6;">${contact.message}</p>
+                            <p style="margin: 8px 0 0 0; color: #6b7280; line-height: 1.6; background: #f9fafb; padding: 12px; border-radius: 6px; border-left: 3px solid #3b82f6; word-wrap: break-word; overflow-wrap: break-word;">${contact.message}</p>
                         </div>
                     </div>
                 `).join('');
