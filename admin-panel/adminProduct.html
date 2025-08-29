@@ -255,7 +255,7 @@
                 // Handle both Cloudinary URLs and local paths
                 let imageUrl = product.image;
                 if (product.image && product.image.startsWith('/uploads/')) {
-                    imageUrl = `https://sumedh-boudh-backend.vercel.app${product.image}`;
+                    imageUrl = `http://localhost:5000${product.image}`;
                 }
 
                 // Limit content to 100 characters with ellipsis
